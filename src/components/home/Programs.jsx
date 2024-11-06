@@ -5,11 +5,11 @@ import Link from "next/link";
 
 
 const Options = [
-  { text: "B. Arch", img: "./programs/barch.png", link: "#" },
-  { text: "B. Pharm", img: "./programs/bphram.png", link: "#" },
+  { text: "B.Arch", img: "./programs/barch.png", link: "#" },
+  { text: "B.Pharm", img: "./programs/bphram.png", link: "#" },
   { text: "BCA", img: "./programs/bca.png", link: "#" },
-  { text: "BE/B. Tech", img: "./programs/be-btech.png", link: "#" },
-  { text: "B. Sc", img: "./programs/bsc.png", link: "#" },
+  { text: "BE/B.Tech", img: "./programs/be-btech.png", link: "#" },
+  { text: "B.Sc", img: "./programs/bsc.png", link: "#" },
 ];
 
 const Programs = () => {
@@ -53,8 +53,8 @@ const Programs = () => {
               className="h-28 w-52 bg-gray-200 border border-black rounded-lg flex flex-col items-center justify-center hover:shadow-xl hover:bg-slate-300 transition-all"
               onClick={ () => {
 
-                if(option.text === "B. Sc" || option.text === "BE/B. Tech"){
-                    openModal(option.text === "B. Sc" ? "BSc" : "BE/B. Tech")
+                if(option.text === "B.Sc" || option.text === "BE/B.Tech"){
+                    openModal(option.text === "B.Sc" ? "BSc" : "BE/B.Tech")
                 }
                 else{
                   redirectCourse(option.text)
