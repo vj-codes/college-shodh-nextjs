@@ -7,8 +7,10 @@ import bebtech from "../../assets/bebtech-min.jpg";
 import bsc from "../../assets/bsc-min.jpg";
 // import "../../styles/Home/Home.css";
 import { IoArrowForwardOutline } from "react-icons/io5";
+import Image from "next/image";
 
 const BackgroundImages = [barch_image, bpharma, bca, bebtech, bsc];
+
 
 const Options = [
   { text: "B. Arch", img: "./agri.png", link: "#" },
@@ -31,6 +33,7 @@ export default function Home() {
   const [bgIndex, setBgIndex] = useState(0);
   const [optionIndex, setOptionIndex] = useState(0);
 
+
   useEffect(() => {
     const intervalId = setInterval(() => {
       setBgIndex((prevIndex) => (prevIndex + 1) % BackgroundImages.length);
@@ -41,15 +44,15 @@ export default function Home() {
   }, []);
   return (
     <div>
-      <link rel="preload" as="image" href={barch_image} />
-      <link rel="preload" as="image" href={bpharma} />
-      <link rel="preload" as="image" href={bca} />
-      <link rel="preload" as="image" href={bebtech} />
-      <link rel="preload" as="image" href={bsc} />
+      <link rel="preload" as="image" href={barch_image.src} />
+      <link rel="preload" as="image" href={bpharma.src} />
+      <link rel="preload" as="image" href={bca.src} />
+      <link rel="preload" as="image" href={bebtech.src} />
+      <link rel="preload" as="image" href={bsc.src} />
       <div
         id="image"
         className="relative h-[36.3rem] bg-cover bg-center bg-[rgba(0,0,0,0.4)] bg-blend-darken"
-        style={{ backgroundImage: `url(${BackgroundImages[bgIndex]})` }}
+        style={{ backgroundImage: `url(${BackgroundImages[bgIndex].src})` }}
       >
         <div className="absolute inset-0 bg-black opacity-40"></div>
 
