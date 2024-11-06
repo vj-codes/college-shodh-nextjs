@@ -6,7 +6,6 @@ import { MdEmail } from "react-icons/md";
 import emailjs from '@emailjs/browser';
 function ContactUs() {
 
-    console.log( process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID)
   const emailAddress = "coneixementindia@gmail.com";
   const emailStyle = {
     color: "blue",
