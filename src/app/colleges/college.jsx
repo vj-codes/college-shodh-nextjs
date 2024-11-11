@@ -6,6 +6,7 @@ import HashLoader from "react-spinners/HashLoader";
 import Link from "next/link";
 import Ranking from "@/components/Colleges/Ranking";
 import Pagination from "@/components/Colleges/Pagination";
+import CollegeCard from "@/components/Colleges/CollegeCard";
 
 
 
