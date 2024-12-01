@@ -1,26 +1,27 @@
 "use client"
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import SearchIcon from "@mui/icons-material/Search";
 import HashLoader from "react-spinners/HashLoader";
-import Link from "next/link";
+import SearchIcon from "@mui/icons-material/Search";
 import Ranking from "@/components/Colleges/Ranking";
 import Pagination from "@/components/Colleges/Pagination";
 import CollegeCard from "@/components/Colleges/CollegeCard";
+import MyModal from "@/components/Modals/Modal";
+import Link from "next/link";
 
 
 
 const Options = [
-  { text: "B. Arch", course: "Architecture", link:"#" },
-  { text: "B. Pharm", course: "Pharmacy", link:"#" },
-  { text: "BCA", course: "BCA", link:"#" },
-  { text: "BE/B. Tech", course: "Engineering", link:"#" },
-  { text: "B. Sc", course: "Science", link:"#" },
+  { text: "B. Arch", course: "Architecture", link: "#" },
+  { text: "B. Pharm", course: "Pharmacy", link: "#" },
+  { text: "BCA", course: "BCA", link: "#" },
+  { text: "BE/B. Tech", course: "Engineering", link: "#" },
+  { text: "B. Sc", course: "Science", link: "#" },
 ];
 
 function Colleges() {
+
   // Get the query from the URL
-  
   const query = new URLSearchParams(window.location.search);
   let courseparam = query.get("course") || "";
   const cityparam = query.get("city") || "";
@@ -92,10 +93,10 @@ function Colleges() {
       : true;
     const isCityMatch = selectedCity
       ? college.address.toLowerCase().includes(selectedCity.toLowerCase())
-      : true; 
+      : true;
     const isCourseMatch = selectedCourse
       ? college.dept &&
-        college.dept.toLowerCase().includes(selectedCourse.toLowerCase())
+      college.dept.toLowerCase().includes(selectedCourse.toLowerCase())
       : true;
     return (
       (search === "" ||

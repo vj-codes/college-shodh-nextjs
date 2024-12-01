@@ -109,15 +109,15 @@ export default function Home() {
 
             <div className="options-container hidden lg:block absolute top-0 right-0 mt-40 mr-4 md:mr-36 transition-[font-size,font-weight,color] duration-300 ease-in-out">
               {Options.map((option, index) => (
-                  <div
-                    key={index}
-                    className={`text-left text-lg md:text-3xl font-sans font-semibold text-gray-800 mb-2 mr-40 ${optionIndex === index
-                      ? "font-bold text-orange-600"
-                      : "text-white"
-                      }`}
-                  >
-                    {option.text}
-                  </div>
+                <div
+                  key={index}
+                  className={`text-left text-lg md:text-3xl font-sans font-semibold text-gray-800 mb-2 mr-40 ${optionIndex === index
+                    ? "font-bold text-orange-600"
+                    : "text-white"
+                    }`}
+                >
+                  {option.text}
+                </div>
               ))}
             </div>
           </div>

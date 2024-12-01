@@ -1,11 +1,12 @@
-"use client"
-import React, { useState } from "react";
+// "use client"
 import Grid from "@mui/material/Grid";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
 import Slider from "@mui/material/Slider";
-// import "../../styles/Colleges/Ranking.css"; 
+import React, { useState } from "react";
+import { naacOptions, statesWithCitiesIndia, statesWithCitiesIndiaArray } from "@/data/collegeData";
 
+// Ranking component is used to display and manage filters for colleges based on various criteria.
 function Ranking({
   filterNaac,
   handleNaacFilter,
@@ -15,95 +16,65 @@ function Ranking({
   onNbaFilter,
   openFilters,
   setOpenFilters
-  
+
 }) {
+  // State variables for managing user selections.
   const [selectedState, setSelectedState] = useState("");
   const [selectedCity, setSelectedCity] = useState("");
   const [nirfRanking, setNirfRanking] = useState([0, 200]);
   const [nbaAccreditation, setNbaAccreditation] = useState("");
 
+   // Handles changes in the state filter.
   const handleStateChange = (event) => {
     setSelectedState(event.target.value);
     onStateChange(event.target.value);
   };
 
+  // Handles changes in the NIRF ranking slider.
   const handleSliderChange = (event, newValue) => {
     setNirfRanking(newValue);
     handleSortChange(newValue);
   };
-
+  
+  // Handles changes in the city filter.
   const handleCityChange = (event) => {
-    setSelectedCity(event.target.value);
-    onStateChange(event.target.value);
+    const city = event.target.value;
+    const state = getStateByCity(city);
+    setSelectedCity(city);
+    onStateChange(city);
+    if (state) {
+      setSelectedState(state);
+    }
   };
-
+  
+  // Handles changes in the NBA accreditation filter.
   const handleNbaChange = (event) => {
     setNbaAccreditation(event.target.value);
     onNbaFilter(event.target.value);
   };
 
-  const naacOptions = [
-    "NAAC A",
-    "NAAC A+",
-    "NAAC A++",
-    "NAAC B",
-    "NAAC B+",
-    "NAAC B++",
-    "NAAC C",
-    "NAAC D",
-  ];
-  const stateOptions = [
-    "Andhra Pradesh",
-    "Arunachal Pradesh",
-    "Assam",
-    "Bihar",
-    "Chhattisgarh",
-    "Gujarat",
-    "Haryana",
-    "Himachal Pradesh",
-    "Jammu and Kashmir",
-    "Goa",
-    "Jharkhand",
-    "Karnataka",
-    "Kerala",
-    "Madhya Pradesh",
-    "Maharashtra",
-    "Manipur",
-    "Meghalaya",
-    "Mizoram",
-    "Nagaland",
-    "Odisha",
-    "Punjab",
-    "Rajasthan",
-    "Sikkim",
-    "Tamil Nadu",
-    "Telangana",
-    "Tripura",
-    "Uttarakhand",
-    "Uttar Pradesh",
-    "West Bengal",
-    "Andaman and Nicobar Islands",
-    "Chandigarh",
-    "Dadra and Nagar Haveli",
-    "Daman and Diu",
-    "Delhi",
-    "Lakshadweep",
-    "Puducherry",
-  ];
-  const cityOptions = [
-    "Kurukshetra",
-    "Mumbai",
-    "Chennai",
-    "Delhi",
-    "Hyderabad",
-    "Bengaluru",
-    "Jaipur",
-    "Ahemdabad",
-    "Kolkata",
-    "Indore",
-  ];
+  // Clears all selected filters.
+  const handleClearFilter = () => {
+    setSelectedState("");
+    setSelectedCity("");
+    setNirfRanking([0, 200]);
+    setNbaAccreditation("");
+    handleNaacFilter({ target: { value: "" } });
+    onStateChange("");
+    onNbaFilter("");
+  }
 
   const nbaOptions = ["Accredited"];
+
+  // Helper function to retrieve the state corresponding to a city.
+  function getStateByCity(city) {
+    for (const [state, cities] of Object.entries(statesWithCitiesIndia)) {
+      if (cities.includes(city)) {
+        return state;
+      }
+    }
+    return null; // If city is not found in any state
+  }
 
   const formControlLabelStyle = {
     display: "flex",
@@ -111,75 +82,84 @@ function Ranking({
   };
 
   return (
-    <Grid container direction="column" 
-    className="outer-box bg-white border border-[rgb(213,211,211)] text-[rgb(17,17,27)] w-[200px] p-[10px] rounded-[10px]">
+    <Grid container direction="column"
+      className="outer-box bg-white border border-[rgb(213,211,211)] text-[rgb(17,17,27)] w-[200px] p-[10px] rounded-[10px]">
       <Grid item className="Inner-Topic flex justify-between">
         <h5 className="Apply-Filter  font-bold mb-1 ">Apply Filter</h5>
         {openFilters !== null &&
-        <button 
-        className="md:hidden font-bold bg-blue-500 text-white px-4 py-2 rounded-lg"
-        onClick={() => {
-          if(openFilters){
-            setOpenFilters(!openFilters)
-          }
-        }}
-        >
-          X
-        </button>}
+          <button
+            className="md:hidden font-bold bg-blue-500 text-white px-4 py-2 rounded-lg"
+            onClick={() => {
+              if (openFilters) {
+                setOpenFilters(!openFilters)
+              }
+            }}
+          >
+            X
+          </button>}
       </Grid>
 
+       {/* State filter section */}
+      <Grid item className="Inner-Topic">
+        <hr />
+        <h4 className="font-bold mb-1 sub-topic text-left">State</h4>
+        <hr />
+      </Grid>
+      <div className="scrollable-container max-h-[300px] overflow-y-auto">
+        {statesWithCitiesIndiaArray.map((states) => (
+          <Grid className="" item key={states.state}>
+            <FormControlLabel className="Check-Box p-0 m-0 h-[25px]"
+              control={
+                <Checkbox
+                  checked={selectedState === states.state}
+                  onChange={handleStateChange}
+                  value={states.state}
+                />
+              }
+              label={states.state}
+              style={formControlLabelStyle}
+            />
+          </Grid>
+        ))}
+      </div>
+
+      {/* City filter section */}
       <Grid item className="Inner-Topic">
         <hr />
         <h4 className="font-bold mb-2 sub-topic">Select City</h4>
-        <hr/>
-      </Grid>
-      <div className="scrollable-container max-h-[300px] overflow-y-auto">
-        {cityOptions.map((city) => (
-          <Grid item key={city}>
-            <FormControlLabel className="Check-Box p-0 m-0 h-[25px]"
-              control={
-                <Checkbox
-                 
-                  checked={selectedCity === city}
-                  onChange={handleCityChange}
-                  value={city}
-                />
-              }
-              label={city}
-              style={formControlLabelStyle}
-            />
-          </Grid>
-        ))}
-      </div>
-
-      <Grid item className="Inner-Topic">
         <hr />
-        <h4 className="font-bold mb-1 sub-topic text-left">Top State</h4>
-        <hr/>
       </Grid>
       <div className="scrollable-container max-h-[300px] overflow-y-auto">
-        {stateOptions.map((state) => (
-          <Grid className="" item key={state}>
-            <FormControlLabel className="Check-Box p-0 m-0 h-[25px]"
-              control={
-                <Checkbox
-                  checked={selectedState === state}
-                  onChange={handleStateChange}
-                  value={state}
-                />
-              }
-              label={state}
-              style={formControlLabelStyle}
-            />
+        {statesWithCitiesIndiaArray.map((state, index) => (
+          <Grid item key={index}>
+            {state.cities.map((city) => (
+
+
+              <FormControlLabel className="Check-Box p-0 m-0 h-[25px]"
+                control={
+                  <Checkbox
+
+                    checked={selectedCity === city}
+                    onChange={handleCityChange}
+                    value={city}
+                  />
+                }
+                label={city}
+                style={formControlLabelStyle}
+              />
+            ))
+            }
           </Grid>
         ))}
       </div>
 
+      {/* NAAC rating filter section */}
       <Grid>
         <hr />
         <h2 className="font-bold mb-2 sub-topic">NAAC Rating</h2>
-        <hr/>
+        <hr />
       </Grid>
+
       <div className="scrollable-container max-h-[300px] overflow-y-auto">
         {naacOptions.map((option) => (
           <Grid item key={option}>
@@ -188,7 +168,7 @@ function Ranking({
               control={
                 <Checkbox
                   checked={filterNaac === option}
-                  onChange={ handleNaacFilter}
+                  onChange={handleNaacFilter}
                   value={option}
                 />
               }
@@ -199,10 +179,11 @@ function Ranking({
         ))}
       </div>
 
+      {/* NIRF ranking filter section */}
       <Grid item className="Inner-Topic">
         <hr />
         <h2 className="font-bold mb-2 sub-topic">NIRF Ranking</h2>
-        <hr/>
+        <hr />
       </Grid>
       <Grid item>
         <Slider
@@ -215,10 +196,11 @@ function Ranking({
         />
       </Grid>
 
+      {/* NBA accreditation filter section */}
       <Grid item className="Inner-Topic">
         <hr />
         <h2 className="font-bold mb-2 sub-topic">NBA Accreditation</h2>
-        <hr/>
+        <hr />
       </Grid>
       <div className="scrollable-container max-h-[300px] overflow-y-auto">
         {nbaOptions.map((option) => (
@@ -238,17 +220,11 @@ function Ranking({
           </Grid>
         ))}
       </div>
+
+      {/* Clear Filters button */}
       <button
         className="clear-filter-btn font-bold mt-4 bg-blue-500 text-white px-4 py-2 rounded-lg"
-        onClick={() => {
-          setSelectedState("");
-          setSelectedCity("");
-          setNirfRanking([0, 200]);
-          setNbaAccreditation("");
-          handleNaacFilter({target:{value:""}});
-          onStateChange("");
-          onNbaFilter("");
-        }}
+        onClick={handleClearFilter}
       >Clear Filters</button>
     </Grid>
   );
@@ -257,248 +233,3 @@ function Ranking({
 export default Ranking;
 
 
-// import React, { useState } from "react";
-// import Grid from "@mui/material/Grid";
-// import FormControlLabel from "@mui/material/FormControlLabel";
-// import Checkbox from "@mui/material/Checkbox";
-// import Slider from "@mui/material/Slider";
-// import "./Ranking.css"; // Import the CSS file
-
-// function Ranking({
-//   filterNaac,
-//   handleNaacFilter,
-//   sortOrder,
-//   handleSortChange,
-//   onStateChange,
-//   onNbaFilter,
-// }) {
-//   const [selectedStates, setSelectedStates] = useState([]);
-//   const [selectedCities, setSelectedCities] = useState([]);
-//   const [nirfRanking, setNirfRanking] = useState([0, 200]);
-//   const [nbaAccreditations, setNbaAccreditations] = useState([]);
-
-//   const handleStateChange = (event) => {
-//     const value = event.target.value;
-//     setSelectedStates((prevSelected) =>
-//       prevSelected.includes(value)
-//         ? prevSelected.filter((state) => state !== value)
-//         : [...prevSelected, value]
-//     );
-//     onStateChange(value);
-//   };
-
-//   const handleCityChange = (event) => {
-//     const value = event.target.value;
-//     setSelectedCities((prevSelected) =>
-//       prevSelected.includes(value)
-//         ? prevSelected.filter((city) => city !== value)
-//         : [...prevSelected, value]
-//     );
-//     onStateChange(value);
-//   };
-
-//   const handleNbaChange = (event) => {
-//     const value = event.target.value;
-//     setNbaAccreditations((prevSelected) =>
-//       prevSelected.includes(value)
-//         ? prevSelected.filter((nba) => nba !== value)
-//         : [...prevSelected, value]
-//     );
-//     onNbaFilter(value);
-//   };
-
-//   const handleSliderChange = (event, newValue) => {
-//     setNirfRanking(newValue);
-//     handleSortChange(newValue);
-//   };
-
-//   const naacOptions = [
-//     "NAAC A",
-//     "NAAC A+",
-//     "NAAC A++",
-//     "NAAC B",
-//     "NAAC B+",
-//     "NAAC B++",
-//     "NAAC C",
-//     "NAAC D",
-//   ];
-//   const stateOptions = [
-//     "Andhra Pradesh",
-//     "Arunachal Pradesh",
-//     "Assam",
-//     "Bihar",
-//     "Chhattisgarh",
-//     "Gujarat",
-//     "Haryana",
-//     "Himachal Pradesh",
-//     "Jammu and Kashmir",
-//     "Goa",
-//     "Jharkhand",
-//     "Karnataka",
-//     "Kerala",
-//     "Madhya Pradesh",
-//     "Maharashtra",
-//     "Manipur",
-//     "Meghalaya",
-//     "Mizoram",
-//     "Nagaland",
-//     "Odisha",
-//     "Punjab",
-//     "Rajasthan",
-//     "Sikkim",
-//     "Tamil Nadu",
-//     "Telangana",
-//     "Tripura",
-//     "Uttarakhand",
-//     "Uttar Pradesh",
-//     "West Bengal",
-//     "Andaman and Nicobar Islands",
-//     "Chandigarh",
-//     "Dadra and Nagar Haveli",
-//     "Daman and Diu",
-//     "Delhi",
-//     "Lakshadweep",
-//     "Puducherry",
-//   ];
-//   const cityOptions = [
-//     "Kurukshetra",
-//     "Mumbai",
-//     "Chennai",
-//     "Delhi",
-//     "Hyderabad",
-//     "Bengaluru",
-//     "Jaipur",
-//     "Ahemdabad",
-//     "Kolkata",
-//     "Indore",
-//   ];
-
-//   const nbaOptions = ["Accredited"];
-
-//   const formControlLabelStyle = {
-//     display: "flex",
-//     justifyContent: "flex-start",
-//   };
-
-//   return (
-//     <Grid container direction="column" className="outer-box">
-//       <Grid item className="Inner-Topic">
-//         <h5 className="Apply-Filter font-bold mb-1">Apply Filter</h5>
-//       </Grid>
-
-//       <Grid item className="Inner-Topic">
-//         <hr />
-//         <h4 className="font-bold mb-2 sub-topic">Select City</h4>
-//         <hr />
-//       </Grid>
-//       <div className="scrollable-container">
-//         {cityOptions.map((city) => (
-//           <Grid item key={city}>
-//             <FormControlLabel
-//               className="Check-Box p-0"
-//               control={
-//                 <Checkbox
-//                   checked={selectedCities.includes(city)}
-//                   onChange={handleCityChange}
-//                   value={city}
-//                 />
-//               }
-//               label={city}
-//               style={formControlLabelStyle}
-//             />
-//           </Grid>
-//         ))}
-//       </div>
-
-//       <Grid item className="Inner-Topic">
-//         <hr />
-//         <h4 className="font-bold mb-1 sub-topic">Top State</h4>
-//         <hr />
-//       </Grid>
-//       <div className="scrollable-container">
-//         {stateOptions.map((state) => (
-//           <Grid className="mb-0" item key={state}>
-//             <FormControlLabel
-//               className="Check-Box p-0"
-//               control={
-//                 <Checkbox
-//                   checked={selectedStates.includes(state)}
-//                   onChange={handleStateChange}
-//                   value={state}
-//                 />
-//               }
-//               label={state}
-//               style={formControlLabelStyle}
-//             />
-//           </Grid>
-//         ))}
-//       </div>
-
-//       <Grid>
-//         <hr />
-//         <h2 className="font-bold mb-2 sub-topic">NAAC Rating</h2>
-//         <hr />
-//       </Grid>
-//       <div className="scrollable-container">
-//         {naacOptions.map((option) => (
-//           <Grid item key={option}>
-//             <FormControlLabel
-//               className="Check-Box p-0"
-//               control={
-//                 <Checkbox
-//                   checked={filterNaac === option}
-//                   onChange={handleNaacFilter}
-//                   value={option}
-//                 />
-//               }
-//               label={option}
-//               style={formControlLabelStyle}
-//             />
-//           </Grid>
-//         ))}
-//       </div>
-
-//       <Grid item className="Inner-Topic">
-//         <hr />
-//         <h2 className="font-bold mb-2 sub-topic">NIRF Ranking</h2>
-//         <hr />
-//       </Grid>
-//       <Grid item>
-//         <Slider
-//           value={nirfRanking}
-//           onChange={handleSliderChange}
-//           valueLabelDisplay="auto"
-//           min={0}
-//           max={200}
-//           step={1}
-//         />
-//       </Grid>
-
-//       <Grid item className="Inner-Topic">
-//         <hr />
-//         <h2 className="font-bold mb-2 sub-topic">NBA Accreditation</h2>
-//         <hr />
-//       </Grid>
-//       <div className="scrollable-container">
-//         {nbaOptions.map((option) => (
-//           <Grid item key={option}>
-//             <FormControlLabel
-//               className="Check-Box p-0"
-//               control={
-//                 <Checkbox
-//                   checked={nbaAccreditations.includes(option)}
-//                   onChange={handleNbaChange}
-//                   value={option}
-//                 />
-//               }
-//               label={option}
-//               style={formControlLabelStyle}
-//             />
-//           </Grid>
-//         ))}
-//       </div>
-//     </Grid>
-//   );
-// }
-
-// export default Ranking;
