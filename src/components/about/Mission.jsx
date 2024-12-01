@@ -34,10 +34,9 @@ const Mission = () => {
 
                 <div className="mt-4 md:mt-8 text-center">
                   <Link
-                    href="#"
-                    className="inline-block rounded bg-blue-700 px-12 py-3 text-sm font-medium text-white transition hover:bg-blue-800 focus:outline-none focus:ring focus:ring-blue-400"
-                  >
-                    Get Started Today
+                    href="#">
+                    <button className="inline-block rounded bg-blue-700 px-12 py-3 text-sm font-medium text-white transition hover:bg-blue-800 focus:outline-none focus:ring focus:ring-blue-400">                    Get Started Today
+                    </button>
                   </Link>
                 </div>
               </div>

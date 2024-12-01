@@ -47,12 +47,14 @@ export default function Header() {
       <nav className="bg-white border-gray-200 px-4 md:px-6 py-2.5">
         <div className="flex flex-wrap justify-between items-center mx-auto max-w-screen-xl">
           <div>
-            <Link href="/" className="flex items-center">
+            <Link href="/" >
+            <div className="flex items-center">
               <img
                 src="Collegeshodh logo_page-0001.png"
                 className="mr-3 h-15 w-20"
                 alt="Logo"
-              />
+                />
+                </div>
             </Link>
           </div>
 
@@ -62,11 +64,6 @@ export default function Header() {
               <Link
                 key={index}
                 href={item.to}
-                className={({ isActive }) =>
-                  `block py-2 pr-0 pl-3 duration-200 ${
-                    isActive ? "text-orange-600" : "text-gray-700"
-                  } hover:text-orange-600`
-                }
               >
                 {item.label}
               </Link>
@@ -78,9 +75,11 @@ export default function Header() {
               href="https://entechonline.com/"
               target="_blank"
               rel="noopener noreferrer"
-              className="hidden md:block text-white bg-orange-500 hover:bg-orange-700 font-medium rounded-lg text-sm px-4 md:px-5 py-2 md:py-2.5 mr-2 focus:outline-none"
-            >
+            > 
+              <button className="hidden md:block text-white bg-orange-500 hover:bg-orange-700 font-medium rounded-lg text-sm px-4 md:px-5 py-2 md:py-2.5 mr-2 focus:outline-none">
+
               Explore Your Passion
+              </button>
             </Link>
           </div>
 
@@ -110,11 +109,7 @@ export default function Header() {
                 <li key={index} className="ml-8">
                   <Link
                     href={item.to}
-                    className={({ isActive }) =>
-                      `block py-2 pr-4 pl-3 duration-200 ${
-                        isActive ? "text-orange-600" : "text-gray-700"
-                      } border-b border-gray-100 hover:bg-gray-50 hover:text-orange-600`
-                    }
+                    
                     onClick={closeMenu}
                   >
                     {item.label}
@@ -125,12 +120,14 @@ export default function Header() {
               <li className="block md:hidden mt-4 ml-8">
                 <Link
                   href="https://entechonline.com/"
-                  className="text-white bg-orange-500 hover:bg-orange-700 font-medium rounded-lg text-sm px-4 py-2 focus:outline-none"
                   onClick={closeMenu}
                   target="_blank"
                   rel="noopener noreferrer"
                 >
+                  <button className="text-white bg-orange-500 hover:bg-orange-700 font-medium rounded-lg text-sm px-4 py-2 focus:outline-none"
+                  >
                   Explore Your Passion
+                  </button>
                 </Link>
               </li>
             </ul>
