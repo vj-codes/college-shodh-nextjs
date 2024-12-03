@@ -9,8 +9,6 @@ import CollegeCard from "@/components/Colleges/CollegeCard";
 import MyModal from "@/components/Modals/Modal";
 import Link from "next/link";
 
-
-
 const Options = [
   { text: "B. Arch", course: "Architecture", link: "#" },
   { text: "B. Pharm", course: "Pharmacy", link: "#" },
@@ -47,19 +45,55 @@ function Colleges() {
   const [loading, setLoading] = useState(true);
   const collegesPerPage = 10;
 
-  useEffect(() => {
-    axios
-      .get("https://college-shodh-backend.onrender.com/api/courses")
-      .then((response) => {
-        setColleges(response.data);
-      })
-      .catch((error) => {
-        console.error(error);
-      })
-      .finally(() => {
-        setLoading(false);
+  const fetchAllColleges = async () => {
+    setLoading(true);
+    try {
+      const response = await axios.get(
+        "http://localhost:3000/api/colleges"
+      );
+      setColleges(response.data || []);
+    } catch (error) {
+      console.error("Error fetching all colleges:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Fetch colleges with filters
+  const fetchFilteredColleges = async () => {
+    setLoading(true);
+
+    try {
+      const response = await axios.post("http://localhost:3000/api/colleges", {
+        search,
+        naac: filterNaac,
+        state: selectedState,
+        city: selectedCity,
+        course: selectedCourse,
+        page: currentPage,
+        limit: collegesPerPage,
       });
-  }, []);
+
+      setColleges(response.data || []);
+    } catch (error) {
+      console.error("Error fetching filtered colleges:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Use effect to fetch data
+  useEffect(() => {
+    if (!search && !filterNaac && !selectedState && !selectedCity && !selectedCourse) {
+      console.log("Fetching all colleges");
+      fetchAllColleges();
+    } else {
+      console.log("Fetching filtered colleges");
+      fetchFilteredColleges();
+    }
+  }, [search, filterNaac, selectedState, selectedCity, selectedCourse, currentPage]);
+
+
 
   const handleNaacFilter = (event) => {
     setFilterNaac(event.target.value);
