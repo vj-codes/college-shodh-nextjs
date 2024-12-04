@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import HashLoader from "react-spinners/HashLoader";
@@ -18,7 +18,6 @@ const Options = [
 ];
 
 function Colleges() {
-
   // Get the query from the URL
   const query = new URLSearchParams(window.location.search);
   let courseparam = query.get("course") || "";
@@ -48,9 +47,7 @@ function Colleges() {
   const fetchAllColleges = async () => {
     setLoading(true);
     try {
-      const response = await axios.get(
-        "http://localhost:3000/api/colleges"
-      );
+      const response = await axios.get("http://localhost:3000/api/colleges");
       setColleges(response.data || []);
     } catch (error) {
       console.error("Error fetching all colleges:", error);
@@ -84,16 +81,27 @@ function Colleges() {
 
   // Use effect to fetch data
   useEffect(() => {
-    if (!search && !filterNaac && !selectedState && !selectedCity && !selectedCourse) {
+    if (
+      !search &&
+      !filterNaac &&
+      !selectedState &&
+      !selectedCity &&
+      !selectedCourse
+    ) {
       console.log("Fetching all colleges");
       fetchAllColleges();
     } else {
       console.log("Fetching filtered colleges");
       fetchFilteredColleges();
     }
-  }, [search, filterNaac, selectedState, selectedCity, selectedCourse, currentPage]);
-
-
+  }, [
+    search,
+    filterNaac,
+    selectedState,
+    selectedCity,
+    selectedCourse,
+    currentPage,
+  ]);
 
   const handleNaacFilter = (event) => {
     setFilterNaac(event.target.value);
@@ -130,7 +138,7 @@ function Colleges() {
       : true;
     const isCourseMatch = selectedCourse
       ? college.dept &&
-      college.dept.toLowerCase().includes(selectedCourse.toLowerCase())
+        college.dept.toLowerCase().includes(selectedCourse.toLowerCase())
       : true;
     return (
       (search === "" ||
@@ -199,17 +207,20 @@ function Colleges() {
           <SearchIcon className="absolute left-3 top-3 text-gray-400" />
         </div>
         <p className="md:mt-3 text-blue-700 font-bold font-sans text-xl">
-          Total Colleges Found: {filteredColleges.length}
+          Total Colleges Found:{" "}
+          <span className="text-orange-600 underline">
+            {filteredColleges.length}
+          </span>
         </p>
       </div>
 
       {/* buttons */}
       <div className="flex flex-col items-center">
-        <div className="mt-5 mb-5 btn-container md:flex justify-center gap-x-8 grid grid-cols-3">
+        <div className="mt-5 mb-5 btn-container md:flex justify-center gap-x-3 grid grid-cols-3">
           {Options.map((option, index) => (
             <Link href={option.link} key={index}>
               <button
-                className="h-12 w-32 bg-[#569df4] border border-black-100 rounded-md hover:drop-shadow-lg"
+                className="h-12 w-32 bg-[#1976D2] border border-black-100 rounded-md hover:drop-shadow-lg"
                 onClick={() => {
                   if (option.text === "B. Sc" || option.text === "BE/B. Tech") {
                     openModal(option.text === "B. Sc" ? "BSc" : "BE/B. Tech");
@@ -227,14 +238,18 @@ function Colleges() {
         </div>
       </div>
 
-      <h1 className="font-bold text-gray-500 font-mono flex justify-center">
-        Following Your Passion in {selectedCourse}
+      <h1 className="text-xl font-bold text-black flex justify-center font-mono">
+        {selectedCourse ? (
+          <>
+            Follow Your Passion in:{" "}
+            <span className="text-orange-600 underline">{selectedCourse}</span>
+          </>
+        ) : (
+          "Follow Your Passion"
+        )}
       </h1>
 
       <div className="flex w-full justify-between">
-        {/*
-      lg:w-1/2 w-full md:ml-4 lg:ml-32 mt-4 mb-4 hidden md:block
-       */}
         <div
           className={
             `

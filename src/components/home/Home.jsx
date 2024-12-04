@@ -60,7 +60,7 @@ export default function Home() {
           <div className="text-white text-left">
             <div id="passion" className="text-gray-800 mt-6 md:mt-6">
               <div className="container inline-block w-min">
-                <div className="text text-3xl lg:text-5xl md:text-4xl tracking-[0.1px] font-sans animate-type border-r-4 whitespace-nowrap overflow-hidden">
+              <div className="text text-3xl lg:text-5xl md:text-4xl tracking-[0.1px] font-sans animate-type border-r-4 whitespace-nowrap overflow-hidden">
                   <span className="text-white">FOLLOW YOUR </span>
                   <span className="text-orange-600">PASSION</span>
                 </div>
