@@ -1,15 +1,21 @@
 import mongoose from 'mongoose';
 
-const connectDB = async (req, res) => {
-  if (mongoose.connections[0].readyState) {
-    // Use current db connection
+const connectDB = async () => {
+  try {
+    // Check if the database is already connected
+    if (mongoose.connection.readyState) {
+      console.log('MongoDB already connected');
+      return;
+    }
+
+    // Connect to the database
+    await mongoose.connect("mongodb://localhost:27017/collegeShodh");
+
+    console.log('MongoDB Connected');
+  } catch (error) {
+    console.error('Error connecting to MongoDB:', error.message);
+    process.exit(1); // Exit process with failure
   }
-  // Use new db connection
-  await mongoose.connect("mongodb://localhost:27017/collegeShodh", {
-    useNewUrlParser: true
-  });
-  console.log('MongoDB Connected');
- 
 };
 
 export default connectDB;
