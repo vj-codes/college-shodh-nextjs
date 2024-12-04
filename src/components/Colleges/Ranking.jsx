@@ -27,11 +27,11 @@ function Ranking({
   // Handles changes in the state filter.
   const handleStateChange = (event) => {
     const selectedValue = event.target.value;
-
     // If the selected state is already selected, deselect it
     if (selectedState === selectedValue) {
       setSelectedState("");
-      onStateChange(""); // Deselect
+      onStateChange(""); // 
+      setSelectedCity("");
     } else {
       setSelectedState(selectedValue);
       onStateChange(selectedValue); // Select
