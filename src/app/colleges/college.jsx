@@ -34,6 +34,9 @@ function Colleges() {
 
   const searchQuery = query.get("search") || "";
 
+  // modal
+  const [showModal, setShowModal] = useState(false);
+  const [selectedType, setSelectedType] = useState("BSc"); // Default to BSc
   const [colleges, setColleges] = useState([]);
   const [search, setSearch] = useState(searchQuery);
   const [filterNaac, setFilterNaac] = useState("");
@@ -42,16 +45,20 @@ function Colleges() {
   const [selectedCity, setSelectedCity] = useState(cityparam);
   const [selectedCourse, setSelectedCourse] = useState(courseparam);
   const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
   const [loading, setLoading] = useState(true);
-  const collegesPerPage = 10;
+  const [openFilters, setOpenFilters] = useState(false);
 
+  // Fetch all colleges
   const fetchAllColleges = async () => {
     setLoading(true);
     try {
       const response = await axios.get(
         "http://localhost:3000/api/colleges"
       );
-      setColleges(response.data || []);
+      setColleges(response.data.colleges || []);
+      setTotalPages(response.data.pagination.totalPages)
+      // console.log(response)
     } catch (error) {
       console.error("Error fetching all colleges:", error);
     } finally {
@@ -59,22 +66,21 @@ function Colleges() {
     }
   };
 
-  // Fetch colleges with filters
+  // Fetch filtered colleges based on selected filters
   const fetchFilteredColleges = async () => {
     setLoading(true);
 
     try {
       const response = await axios.post("http://localhost:3000/api/colleges", {
-        search,
+        course: selectedCourse,
         naac: filterNaac,
         state: selectedState,
         city: selectedCity,
-        course: selectedCourse,
         page: currentPage,
-        limit: collegesPerPage,
+        limit: 10,
       });
-
-      setColleges(response.data || []);
+      setColleges(response.data.colleges || []);
+      setTotalPages(response.data.pagination.totalPages)
     } catch (error) {
       console.error("Error fetching filtered colleges:", error);
     } finally {
@@ -84,21 +90,34 @@ function Colleges() {
 
   // Use effect to fetch data
   useEffect(() => {
-    if (!search && !filterNaac && !selectedState && !selectedCity && !selectedCourse) {
-      console.log("Fetching all colleges");
-      fetchAllColleges();
-    } else {
-      console.log("Fetching filtered colleges");
-      fetchFilteredColleges();
-    }
+    fetchFilteredColleges();
+
   }, [search, filterNaac, selectedState, selectedCity, selectedCourse, currentPage]);
 
+  useEffect(() => {
+    fetchAllColleges();
+  }, [])
 
-
+  // Handle changes in filters and sorting
   const handleNaacFilter = (event) => {
     setFilterNaac(event.target.value);
+    setCurrentPage(1);
   };
 
+  const handleStateChange = (state) => {
+    setSelectedState(state);
+    setCurrentPage(1);
+  };
+
+  const handleCourseChange = (course) => {
+    setSelectedCourse(course.name);
+    setCurrentPage(1);
+  };
+
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+    fetchFilteredColleges();
+  };
   const handleSortChange = (event) => {
     setSortOrder(event.target.value);
     const sortedColleges = [...colleges].sort((a, b) => {
@@ -112,49 +131,6 @@ function Colleges() {
     setColleges(sortedColleges);
   };
 
-  const handleStateChange = (state) => {
-    setSelectedState(state);
-  };
-
-  const handleCourseChange = (course) => {
-    setSelectedCourse(course.name);
-    setCurrentPage(1); // Reset to the first page when course changes
-  };
-
-  const filteredColleges = colleges.filter((college) => {
-    const isStateMatch = selectedState
-      ? college.address.toLowerCase().includes(selectedState.toLowerCase())
-      : true;
-    const isCityMatch = selectedCity
-      ? college.address.toLowerCase().includes(selectedCity.toLowerCase())
-      : true;
-    const isCourseMatch = selectedCourse
-      ? college.dept &&
-      college.dept.toLowerCase().includes(selectedCourse.toLowerCase())
-      : true;
-    return (
-      (search === "" ||
-        college.college_name.toLowerCase().includes(search.toLowerCase())) &&
-      (!filterNaac || college.naac === filterNaac) &&
-      isStateMatch &&
-      isCityMatch &&
-      isCourseMatch
-    );
-  });
-
-  const totalPages = Math.ceil(filteredColleges.length / collegesPerPage);
-  const displayedColleges = filteredColleges.slice(
-    (currentPage - 1) * collegesPerPage,
-    currentPage * collegesPerPage
-  );
-
-  const handlePageChange = (pageNumber) => {
-    setCurrentPage(pageNumber);
-  };
-
-  // modal
-  const [showModal, setShowModal] = useState(false);
-  const [selectedType, setSelectedType] = useState("BSc"); // Default to BSc
 
   const closeModal = (course) => {
     setShowModal(false);
@@ -174,7 +150,6 @@ function Colleges() {
     // marginTop: "-300px",
   };
 
-  const [openFilters, setOpenFilters] = useState(false);
 
   return (
     <>
@@ -199,7 +174,7 @@ function Colleges() {
           <SearchIcon className="absolute left-3 top-3 text-gray-400" />
         </div>
         <p className="md:mt-3 text-blue-700 font-bold font-sans text-xl">
-          Total Colleges Found: {filteredColleges.length}
+          Total Colleges Found: {colleges.length}
         </p>
       </div>
 
@@ -284,7 +259,7 @@ function Colleges() {
           </button>
 
           {loading ? (
-            <div className="flex justify-center items-center h-full w-full">
+            <div className="flex justify-center items-start h-full w-full pt-20">
               <HashLoader
                 size={100}
                 color={"orange"}
@@ -293,16 +268,32 @@ function Colleges() {
               />
             </div>
           ) : (
-            displayedColleges.map((college) => (
-              <CollegeCard key={college._id} college={college} />
-            ))
+            !loading &&
+              Array.isArray(colleges) &&
+              colleges.length > 0 ? (
+              colleges.map((college) => (
+                <CollegeCard key={college._id} college={college} />
+              ))
+            ) : (
+              <div className="flex justify-center items-start  w-full  pt-20">
+              <p className="text-center text-gray-500">No colleges found</p>
+              </div>
+            )
           )}
 
-          <Pagination
-            currentPage={currentPage}
-            totalPages={totalPages}
-            onPageChange={handlePageChange}
-          />
+          {
+            totalPages === 0 ? null
+            :
+            (
+              <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={handlePageChange}
+              />
+            )
+          }
+
+
         </div>
         {showModal && <MyModal closeModal={closeModal} type={selectedType} />}
       </div>

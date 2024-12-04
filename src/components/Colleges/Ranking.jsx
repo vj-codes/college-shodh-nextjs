@@ -24,29 +24,49 @@ function Ranking({
   const [nirfRanking, setNirfRanking] = useState([0, 200]);
   const [nbaAccreditation, setNbaAccreditation] = useState("");
 
-   // Handles changes in the state filter.
+  // Handles changes in the state filter.
   const handleStateChange = (event) => {
-    setSelectedState(event.target.value);
-    onStateChange(event.target.value);
+    const selectedValue = event.target.value;
+
+    // If the selected state is already selected, deselect it
+    if (selectedState === selectedValue) {
+      setSelectedState("");
+      onStateChange(""); // Deselect
+    } else {
+      setSelectedState(selectedValue);
+      onStateChange(selectedValue); // Select
+    }
   };
+
 
   // Handles changes in the NIRF ranking slider.
   const handleSliderChange = (event, newValue) => {
     setNirfRanking(newValue);
     handleSortChange(newValue);
   };
-  
+
   // Handles changes in the city filter.
   const handleCityChange = (event) => {
     const city = event.target.value;
-    const state = getStateByCity(city);
-    setSelectedCity(city);
-    onStateChange(city);
-    if (state) {
-      setSelectedState(state);
+  
+    // Check if the selected city is already selected
+    if (selectedCity === city) {
+      // Deselect the city and clear the state
+      setSelectedCity("");
+      onStateChange(""); // Deselect the state
+      setSelectedState(""); // Clear the selected state
+    } else {
+      // Select the new city and its corresponding state
+      const state = getStateByCity(city);
+      setSelectedCity(city);
+      onStateChange(city);
+      if (state) {
+        setSelectedState(state);
+      }
     }
   };
   
+
   // Handles changes in the NBA accreditation filter.
   const handleNbaChange = (event) => {
     setNbaAccreditation(event.target.value);
@@ -99,7 +119,7 @@ function Ranking({
           </button>}
       </Grid>
 
-       {/* State filter section */}
+      {/* State filter section */}
       <Grid item className="Inner-Topic">
         <hr />
         <h4 className="font-bold mb-1 sub-topic text-left">State</h4>
