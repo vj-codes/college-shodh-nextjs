@@ -143,35 +143,35 @@ function Ranking({
         ))}
       </div>
 
-      {/* City filter section */}
-      <Grid item className="Inner-Topic">
-        <hr />
-        <h4 className="font-bold mb-2 sub-topic">Select City</h4>
-        <hr />
+     {/* City filter section */}
+<Grid item className="Inner-Topic">
+  <hr />
+  <h4 className="font-bold mb-2 sub-topic">Select City</h4>
+  <hr />
+</Grid>
+<div className="scrollable-container max-h-[300px] overflow-y-auto">
+  {selectedState ? (
+    statesWithCitiesIndia[selectedState]?.map((city) => (
+      <Grid item key={city}>
+        <FormControlLabel
+          className="Check-Box p-0 m-0 h-[25px]"
+          control={
+            <Checkbox
+              checked={selectedCity === city}
+              onChange={handleCityChange}
+              value={city}
+            />
+          }
+          label={city}
+          style={formControlLabelStyle}
+        />
       </Grid>
-      <div className="scrollable-container max-h-[300px] overflow-y-auto">
-        {statesWithCitiesIndiaArray.map((state, index) => (
-          <Grid item key={index}>
-            {state.cities.map((city) => (
+    ))
+  ) : (
+    <p className="text-gray-500 italic">Please select a state to see its cities.</p>
+  )}
+</div>
 
-
-              <FormControlLabel className="Check-Box p-0 m-0 h-[25px]"
-                control={
-                  <Checkbox
-
-                    checked={selectedCity === city}
-                    onChange={handleCityChange}
-                    value={city}
-                  />
-                }
-                label={city}
-                style={formControlLabelStyle}
-              />
-            ))
-            }
-          </Grid>
-        ))}
-      </div>
 
       {/* NAAC rating filter section */}
       <Grid>
