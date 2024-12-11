@@ -7,6 +7,7 @@ import Ranking from "@/components/Colleges/Ranking";
 import Pagination from "@/components/Colleges/Pagination";
 import CollegeCard from "@/components/Colleges/CollegeCard";
 import MyModal from "@/components/Modals/Modal";
+import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import Link from "next/link";
 
 const Options = [
@@ -42,7 +43,7 @@ function Colleges() {
   const [sortOrder, setSortOrder] = useState("");
   const [selectedState, setSelectedState] = useState("");
   const [selectedCity, setSelectedCity] = useState(cityparam);
-  const [selectedCourse, setSelectedCourse] = useState(courseparam);
+  const [selectedCourse, setSelectedCourse] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [loading, setLoading] = useState(true);
@@ -109,8 +110,15 @@ function Colleges() {
   };
 
   const handleCourseChange = (course) => {
-    setSelectedCourse(course.name);
-    setCurrentPage(1);
+    console.log(selectedCourse, " ", course)
+    if(selectedCourse === course.name) {
+      setSelectedCourse("");
+      console.log("heee")
+    }else{
+      setSelectedCourse(course.name);
+      setCurrentPage(1);
+      console.log("seee")
+    }
   };
 
   const handlePageChange = (pageNumber) => {
@@ -181,9 +189,8 @@ function Colleges() {
       <div className="flex flex-col items-center">
         <div className="mt-5 mb-5 btn-container md:flex justify-center gap-x-3 grid grid-cols-3">
           {Options.map((option, index) => (
-            <Link href={option.link} key={index}>
               <button
-                className="h-12 w-32 bg-[#1976D2] border border-black-100 rounded-md hover:drop-shadow-lg"
+                className="h-12 w-32  bg-[#1976D2] border border-black-100 rounded-md hover:drop-shadow-lg"
                 onClick={() => {
                   if (option.text === "B. Sc" || option.text === "BE/B. Tech") {
                     openModal(option.text === "B. Sc" ? "BSc" : "BE/B. Tech");
@@ -192,11 +199,15 @@ function Colleges() {
                   }
                 }}
               >
-                <span className="hover:underline text-white font-medium">
+                <p className="flex justify-center items-center gap-x-2 hover:underline text-white font-medium">
                   {option.text}
-                </span>
+                  { selectedCourse === option.course ? 
+                    (<CheckCircleOutlineIcon fontSize="small"/>)
+                    :
+                    null
+                  }
+                </p>
               </button>
-            </Link>
           ))}
         </div>
       </div>
@@ -279,21 +290,21 @@ function Colleges() {
               ))
             ) : (
               <div className="flex justify-center items-start  w-full  pt-20">
-              <p className="text-center text-gray-500">No colleges found</p>
+                <p className="text-center text-gray-500">No colleges found</p>
               </div>
             )
           )}
 
           {
             totalPages === 0 ? null
-            :
-            (
-              <Pagination
-                currentPage={currentPage}
-                totalPages={totalPages}
-                onPageChange={handlePageChange}
-              />
-            )
+              :
+              (
+                <Pagination
+                  currentPage={currentPage}
+                  totalPages={totalPages}
+                  onPageChange={handlePageChange}
+                />
+              )
           }
 
 

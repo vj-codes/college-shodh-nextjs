@@ -49,6 +49,10 @@ export const POST = async (req) => {
       query.$and = addressFilters; // Combine city and state filters
     }
 
+    if (course) {
+      query.dept = { $regex: new RegExp(course, 'i') }; // Case-insensitive course match
+    }    
+
     // Add NAAC ranking filter
     if (naacRanking) {
       query.naac = { $eq: naacRanking }; // Exact match
