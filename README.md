@@ -17,6 +17,8 @@ cp .env.example .env
 NEXT_PUBLIC_EMAILJS_SERVICE_ID =  "your_service_id"
 NEXT_PUBLIC_EMAILJS_TEMPLATE_ID = "your_template_id"
 NEXT_PUBLIC_EMAILJS_PUBLIC_KEY = "your_public_key"
+
+NEXT_PUBLIC_MONGO_ALTAS_URL = "your_mongo_atlas_url"
 ```
 
 2. Replace the placeholder values (your_service_id, your_template_id, your_public_key) with the actual values from your EmailJS account.
