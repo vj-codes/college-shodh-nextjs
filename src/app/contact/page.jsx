@@ -43,7 +43,7 @@ function ContactUs() {
         message: "Your message was sent successfully.",
         severity: "success",
       });
-      // reset();
+      reset();
     } catch (error) {
     //   alert("Sorry for the inconvenience. Please email abc@email.com for your query.")
       console.log('FAILED...', error);

@@ -190,7 +190,7 @@ function Colleges() {
         <div className="mt-5 mb-5 btn-container md:flex justify-center gap-x-3 grid grid-cols-3">
           {Options.map((option, index) => (
               <button
-                className="h-12 w-32  bg-[#1976D2] border border-black-100 rounded-md hover:drop-shadow-lg"
+              className={`h-12 w-32 border border-black-100 rounded-md hover:drop-shadow-lg ${selectedCourse === option.course ? 'bg-orange-600' : 'bg-[#1976D2]'}`}
                 onClick={() => {
                   if (option.text === "B. Sc" || option.text === "BE/B. Tech") {
                     openModal(option.text === "B. Sc" ? "BSc" : "BE/B. Tech");
@@ -201,11 +201,7 @@ function Colleges() {
               >
                 <p className="flex justify-center items-center gap-x-2 hover:underline text-white font-medium">
                   {option.text}
-                  { selectedCourse === option.course ? 
-                    (<CheckCircleOutlineIcon fontSize="small"/>)
-                    :
-                    null
-                  }
+                  
                 </p>
               </button>
           ))}
