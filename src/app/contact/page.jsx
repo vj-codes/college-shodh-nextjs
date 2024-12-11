@@ -1,15 +1,22 @@
 "use client"
 
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { MdEmail } from "react-icons/md";
 import emailjs from '@emailjs/browser';
+import SnackbarComponent from "@/components/Toast";
 function ContactUs() {
 
   const emailAddress = "coneixementindia@gmail.com";
   const emailStyle = {
     color: "blue",
   };
+
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: "",
+    severity: "", 
+  });
 
   const contactForm = useRef();
 
@@ -31,17 +38,35 @@ function ContactUs() {
           publicKey: process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY,
         }
       );
-      // console.log("Form Data: ", data);
-      // console.log('SUCCESS!', result.text);
-      reset();
+      setSnackbar({
+        open: true,
+        message: "Your message was sent successfully.",
+        severity: "success",
+      });
+      // reset();
     } catch (error) {
     //   alert("Sorry for the inconvenience. Please email abc@email.com for your query.")
       console.log('FAILED...', error);
+      setSnackbar({
+        open: true,
+        message: "Message not sent. Please try again later.",
+        severity: "error",
+      });
     }
+  };
+
+  const handleCloseSnackbar = () => {
+    setSnackbar((prev) => ({ ...prev, open: false }));
   };
 
   return (
     <>
+      <SnackbarComponent
+        message={snackbar.message}
+        severity={snackbar.severity}
+        open={snackbar.open}
+        onClose={handleCloseSnackbar}
+      />
       <div>
         <section className="bg-gray-100">
           <div className="mx-auto max-w-screen-xl px-4 py-16 sm:px-6 lg:px-8">
@@ -166,6 +191,7 @@ function ContactUs() {
             </div>
           </div>
         </section>
+        
       </div>
     </>
   );
