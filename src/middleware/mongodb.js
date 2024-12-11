@@ -9,7 +9,7 @@ const connectDB = async () => {
     }
 
     // Connect to the database
-    await mongoose.connect("mongodb://localhost:27017/collegeShodh");
+    await mongoose.connect(process.env.NEXT_PUBLIC_MONGO_ALTAS_URL);
 
     console.log('MongoDB Connected');
   } catch (error) {
