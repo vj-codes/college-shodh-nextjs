@@ -1,5 +1,6 @@
 import connectDB from "@/middleware/mongodb";
 import Colleges from "@/models/college.model";
+import { expandSearchQuery } from "@/utils/searchHeplerFunction";
 import { NextResponse } from "next/server";
 
 // GET Method
@@ -14,8 +15,8 @@ export const GET = async () => {
         colleges,
         pagination: {
           total: totalCount,
-          page:1,
-          limit:10,
+          page: 1,
+          limit: 10,
           totalPages: Math.ceil(totalCount / 10),
         },
       },
@@ -29,13 +30,25 @@ export const GET = async () => {
 
 // POST Method
 export const POST = async (req) => {
-  await connectDB(); // Ensure the database connection is established
+  await connectDB();
   try {
     const body = await req.json();
-    const { course=null, city=null, state=null, naacRanking=null, nba=null, page = 1, limit = 10 } = body;
+    const { course = null, city = null, state = null, naacRanking = null, nba = null, page = 1, limit = 10, search = null } = body;
 
     // Build the query object dynamically
     const query = {};
+
+    // Add search filter with expanded terms
+    if (search) {
+      const expandedTerms = expandSearchQuery(search);
+      const searchQueries = expandedTerms.map(term => ({
+        $or: [
+          { college_name: { $regex: new RegExp(term, 'i') } },
+        ]
+      }));
+
+      query.$or = searchQueries;
+    }
 
     // Add city and state filter
     if (city || state) {
@@ -51,7 +64,7 @@ export const POST = async (req) => {
 
     if (course) {
       query.dept = { $regex: new RegExp(course, 'i') }; // Case-insensitive course match
-    }    
+    }
 
     // Add NAAC ranking filter
     if (naacRanking) {
@@ -64,15 +77,14 @@ export const POST = async (req) => {
     }
 
     // Calculate pagination
-    const skip = (page - 1) * limit; // Items to skip for current page
-    const totalCount = await Colleges.countDocuments(query); // Total number of matching documents
+    const skip = (page - 1) * limit;
+    const totalCount = await Colleges.countDocuments(query);
 
-    // Fetch the filtered and paginated data
+    // Fetch the filtered and paginated data with scoring
     const results = await Colleges.find(query)
-      .skip(skip) // Skip the appropriate number of documents
-      .limit(limit); // Limit the number of documents fetched
+      .skip(skip)
+      .limit(limit);
 
-    // Return paginated data along with metadata
     return NextResponse.json(
       {
         colleges: results,
