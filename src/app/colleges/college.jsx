@@ -7,8 +7,7 @@ import Ranking from "@/components/Colleges/Ranking";
 import Pagination from "@/components/Colleges/Pagination";
 import CollegeCard from "@/components/Colleges/CollegeCard";
 import MyModal from "@/components/Modals/Modal";
-import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
-import Link from "next/link";
+
 
 const Options = [
   { text: "B. Arch", course: "Architecture", link: "#" },
@@ -18,31 +17,16 @@ const Options = [
   { text: "B. Sc", course: "Science", link: "#" },
 ];
 
-function Colleges() {
-  // Get the query from the URL
-  const query = new URLSearchParams(window.location.search);
-  let courseparam = query.get("course") || "";
-  const cityparam = query.get("city") || "";
-  console.log(courseparam, cityparam);
-
-  if (courseparam == "B. Arch") {
-    courseparam = "Architecture";
-  }
-  if (courseparam == "B. Pharm") {
-    courseparam = "Pharmacy";
-  }
-
-  const searchQuery = query.get("search") || "";
-
-  // modal
+function Colleges() {  
   const [showModal, setShowModal] = useState(false);
-  const [selectedType, setSelectedType] = useState("BSc"); // Default to BSc
+  const [selectedType, setSelectedType] = useState("BSc");
   const [colleges, setColleges] = useState([]);
-  const [search, setSearch] = useState(searchQuery);
+  const [totalCollegeCount, setTotalCollegeCount] = useState(0)
+  const [search, setSearch] = useState("");
   const [filterNaac, setFilterNaac] = useState("");
   const [sortOrder, setSortOrder] = useState("");
   const [selectedState, setSelectedState] = useState("");
-  const [selectedCity, setSelectedCity] = useState(cityparam);
+  const [selectedCity, setSelectedCity] = useState("");
   const [selectedCourse, setSelectedCourse] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
@@ -72,6 +56,7 @@ function Colleges() {
 
     try {
       const response = await axios.post("http://localhost:3000/api/colleges", {
+        search:search,
         course: selectedCourse,
         naac: filterNaac,
         state: selectedState,
@@ -81,6 +66,7 @@ function Colleges() {
       });
       setColleges(response.data.colleges || []);
       setTotalPages(response.data.pagination.totalPages)
+      setTotalCollegeCount(response.data.pagination.total)
     } catch (error) {
       console.error("Error fetching filtered colleges:", error);
     } finally {
@@ -111,10 +97,10 @@ function Colleges() {
 
   const handleCourseChange = (course) => {
     console.log(selectedCourse, " ", course)
-    if(selectedCourse === course.name) {
+    if (selectedCourse === course.name) {
       setSelectedCourse("");
       console.log("heee")
-    }else{
+    } else {
       setSelectedCourse(course.name);
       setCurrentPage(1);
       console.log("seee")
@@ -157,6 +143,10 @@ function Colleges() {
     // marginTop: "-300px",
   };
 
+  const handleOnSearch = (e) =>{
+    setSearch(e.target.value)
+}
+
 
   return (
     <>
@@ -166,22 +156,14 @@ function Colleges() {
             type="text"
             id="search"
             value={search}
-            onChange={(e) => {
-              // Add query to the URL
-              window.history.pushState(
-                "",
-                "",
-                `/colleges?search=${e.target.value}&city=${selectedCity}`
-              );
-              setSearch(e.target.value);
-            }}
+            onChange={handleOnSearch}
             placeholder="Search college"
             className="p-2 h-11 w-96 mb-5 border border-black-400 rounded-2xl focus:outline-none focus:border-blue-600 text-center pl-10"
           />
           <SearchIcon className="absolute left-3 top-3 text-gray-400" />
         </div>
         <p className="md:mt-3 text-blue-700 font-bold font-sans text-xl">
-          Total Colleges Found: {colleges.length}
+          Total Colleges Found: {totalCollegeCount}
         </p>
       </div>
 
@@ -189,21 +171,21 @@ function Colleges() {
       <div className="flex flex-col items-center">
         <div className="mt-5 mb-5 btn-container md:flex justify-center gap-x-3 grid grid-cols-3">
           {Options.map((option, index) => (
-              <button
+            <button
               className={`h-12 w-32 border border-black-100 rounded-md hover:drop-shadow-lg ${selectedCourse === option.course ? 'bg-orange-600' : 'bg-[#1976D2]'}`}
-                onClick={() => {
-                  if (option.text === "B. Sc" || option.text === "BE/B. Tech") {
-                    openModal(option.text === "B. Sc" ? "BSc" : "BE/B. Tech");
-                  } else {
-                    handleCourseChange({ name: option.course });
-                  }
-                }}
-              >
-                <p className="flex justify-center items-center gap-x-2 hover:underline text-white font-medium">
-                  {option.text}
-                  
-                </p>
-              </button>
+              onClick={() => {
+                if (option.text === "B. Sc" || option.text === "BE/B. Tech") {
+                  openModal(option.text === "B. Sc" ? "BSc" : "BE/B. Tech");
+                } else {
+                  handleCourseChange({ name: option.course });
+                }
+              }}
+            >
+              <p className="flex justify-center items-center gap-x-2 hover:underline text-white font-medium">
+                {option.text}
+
+              </p>
+            </button>
           ))}
         </div>
       </div>
@@ -245,21 +227,6 @@ function Colleges() {
           />
         </div>
 
-        {/*  Filter modal for mobile view */}
-        {/* {openFilters && (
-          <div className="w-full fixed md:hidden top-0 bottom-0 left-0 right-0 py-64 bg-[rgba(0,0,0,0.5)] z-[1000] overflow-auto">
-            <Ranking
-              filterNaac={filterNaac}
-              handleNaacFilter={handleNaacFilter}
-              sortOrder={sortOrder}
-              handleSortChange={handleSortChange}
-              onStateChange={handleStateChange}
-              openFilters={openFilters}
-              setOpenFilters={setOpenFilters}
-            />
-          </div>
-        )} */}
-
         <div className="w-full pl-10 flex flex-col mt-3 items-center">
           <button
             className="bg-blue-500 text-white p-2 rounded-md md:w-[70%] w-full mr-12 mb-4 hover:bg-blue-700 md:hidden"
@@ -290,7 +257,6 @@ function Colleges() {
               </div>
             )
           )}
-
           {
             totalPages === 0 ? null
               :
@@ -302,8 +268,6 @@ function Colleges() {
                 />
               )
           }
-
-
         </div>
         {showModal && <MyModal closeModal={closeModal} type={selectedType} />}
       </div>
