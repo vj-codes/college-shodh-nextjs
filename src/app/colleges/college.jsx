@@ -7,6 +7,7 @@ import Ranking from "@/components/Colleges/Ranking";
 import Pagination from "@/components/Colleges/Pagination";
 import CollegeCard from "@/components/Colleges/CollegeCard";
 import MyModal from "@/components/Modals/Modal";
+import useDebounce from "../hooks/useDebounce";
 
 
 const Options = [
@@ -17,7 +18,7 @@ const Options = [
   { text: "B. Sc", course: "Science", link: "#" },
 ];
 
-function Colleges() {  
+function Colleges() {
   const [showModal, setShowModal] = useState(false);
   const [selectedType, setSelectedType] = useState("BSc");
   const [colleges, setColleges] = useState([]);
@@ -32,6 +33,9 @@ function Colleges() {
   const [totalPages, setTotalPages] = useState(1);
   const [loading, setLoading] = useState(true);
   const [openFilters, setOpenFilters] = useState(false);
+
+// Debounced search term to optimize API calls
+  const debouncedSearchTerm = useDebounce(search, 500);
 
   // Fetch all colleges
   const fetchAllColleges = async () => {
@@ -56,7 +60,7 @@ function Colleges() {
 
     try {
       const response = await axios.post("http://localhost:3000/api/colleges", {
-        search:search,
+        search: search,
         course: selectedCourse,
         naac: filterNaac,
         state: selectedState,
@@ -77,8 +81,7 @@ function Colleges() {
   // Use effect to fetch data
   useEffect(() => {
     fetchFilteredColleges();
-
-  }, [search, filterNaac, selectedState, selectedCity, selectedCourse, currentPage]);
+  }, [debouncedSearchTerm, filterNaac, selectedState, selectedCity, selectedCourse, currentPage]);
 
   useEffect(() => {
     fetchAllColleges();
@@ -143,9 +146,9 @@ function Colleges() {
     // marginTop: "-300px",
   };
 
-  const handleOnSearch = (e) =>{
+  const handleOnSearch = (e) => {
     setSearch(e.target.value)
-}
+  }
 
 
   return (
