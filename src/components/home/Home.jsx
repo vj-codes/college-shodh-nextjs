@@ -1,5 +1,5 @@
 "use client"
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import barch_image from "../../assets/barch-min.jpg";
 import bpharma from "../../assets/bpharma-min.jpg";
 import bca from "../../assets/bca-min.jpg";
@@ -8,7 +8,8 @@ import bsc from "../../assets/bsc-min.jpg";
 // import "../../styles/Home/Home.css";
 import { IoArrowForwardOutline } from "react-icons/io5";
 import Image from "next/image";
-
+import { SearchContext } from "@/context/SearchContext";
+import { redirect } from "next/navigation";
 const BackgroundImages = [barch_image, bpharma, bca, bebtech, bsc];
 
 
@@ -22,17 +23,31 @@ const Options = [
 
 export default function Home() {
   // const [showModal, setShowModal] = useState(false);
-  const [selectedType, setSelectedType] = useState("BSc"); // Default to BSc
-
-  // const closeModal = () => setShowModal(false);
-  // const openModal = (type) => {
-  //   setShowModal(true);
-  //   setSelectedType(type);
-  // };
+  const [redirectTo, setRedirectTo] = useState(null); 
+  const [isClicked, setIsClicked] = useState(false);
+  const [selectedType, setSelectedType] = useState("BSc");
+  const [search, setSearch ] = useState("");
+  const { searchTerm, setSearchTerm } = useContext(SearchContext);
 
   const [bgIndex, setBgIndex] = useState(0);
   const [optionIndex, setOptionIndex] = useState(0);
 
+  const handleSearchChange = (e) => {
+    setSearch(e.target.value)
+  }
+
+  const handleSearchClick = (e) => {
+    e.preventDefault()
+    // setIsClicked(true)
+    setSearchTerm(search)
+    setRedirectTo('/colleges');
+
+  }
+    useEffect(() => {
+      if (redirectTo) {
+        redirect(redirectTo);  // Perform the redirect when target is set
+      }
+    }, [redirectTo]);  // This will trigger when redirectTo state changes
 
   useEffect(() => {
     const intervalId = setInterval(() => {
@@ -60,7 +75,7 @@ export default function Home() {
           <div className="text-white text-left">
             <div id="passion" className="text-gray-800 mt-6 md:mt-6">
               <div className="container inline-block w-min">
-              <div className="text text-3xl lg:text-5xl md:text-4xl tracking-[0.1px] font-sans animate-type border-r-4 whitespace-nowrap overflow-hidden">
+                <div className="text text-3xl lg:text-5xl md:text-4xl tracking-[0.1px] font-sans animate-type border-r-4 whitespace-nowrap overflow-hidden">
                   <span className="text-white">FOLLOW YOUR </span>
                   <span className="text-orange-600">PASSION</span>
                 </div>
@@ -72,16 +87,13 @@ export default function Home() {
             </p>
 
             <div className="relative mb-6">
-              <form className="w-full flex"
-                onSubmit={(e) => {
-                  e.preventDefault()
-                  if (e.target.search.value.trim() === "") return
-                  window.location.href = `/colleges?search=${e.target.search.value}`
-                }}>
+              <form className="w-full flex">
                 <div className="input+svg">
                   <input
                     type="text"
                     id="search"
+                    value={search}
+                    onChange={handleSearchChange}
                     placeholder="Search for colleges, courses, exams, QnAs...."
                     className="text-black px-4 py-3 md:py-4 pl-12 h-10 md:h-12 w-full md:w-96 border border-gray-500 rounded-2xl focus:outline-none focus:border-blue-500"
                   />
@@ -101,7 +113,7 @@ export default function Home() {
                     />
                   </svg>
                 </div>
-                <button type="submit" className="bg-orange-600 text-white px-4 py-3 md:py-4 ml-2 rounded-2xl">
+                <button type="submit" onClick={handleSearchClick} className="bg-orange-600 text-white px-4 py-3 md:py-4 ml-2 rounded-2xl">
                   <IoArrowForwardOutline />
                 </button>
               </form>

@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import HashLoader from "react-spinners/HashLoader";
 import SearchIcon from "@mui/icons-material/Search";
@@ -8,6 +8,7 @@ import Pagination from "@/components/Colleges/Pagination";
 import CollegeCard from "@/components/Colleges/CollegeCard";
 import MyModal from "@/components/Modals/Modal";
 import useDebounce from "../hooks/useDebounce";
+import { SearchContext } from "@/context/SearchContext";
 
 
 const Options = [
@@ -34,7 +35,9 @@ function Colleges() {
   const [loading, setLoading] = useState(true);
   const [openFilters, setOpenFilters] = useState(false);
 
-// Debounced search term to optimize API calls
+  const { searchTerm, setSearchTerm } = useContext(SearchContext);
+
+  // Debounced search term to optimize API calls
   const debouncedSearchTerm = useDebounce(search, 500);
 
   // Fetch all colleges
@@ -81,11 +84,15 @@ function Colleges() {
   // Use effect to fetch data
   useEffect(() => {
     fetchFilteredColleges();
-  }, [debouncedSearchTerm, filterNaac, selectedState, selectedCity, selectedCourse, currentPage]);
+  }, [ debouncedSearchTerm, filterNaac, selectedState, selectedCity, selectedCourse, currentPage]);
 
   useEffect(() => {
     fetchAllColleges();
   }, [])
+
+  useEffect(() => {
+    setSearch(searchTerm)
+  }, [searchTerm])
 
   // Handle changes in filters and sorting
   const handleNaacFilter = (event) => {
