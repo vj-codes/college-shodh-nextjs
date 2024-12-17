@@ -1,6 +1,6 @@
 import connectDB from "@/config/mongodb";
 import Colleges from "@/models/college.model";
-import { expandSearchQuery } from "@/utils/searchHeplerFunction";
+import { expandSearchQuery } from "@/utils/searchQueryExpander";
 import { NextResponse } from "next/server";
 
 // GET Method
