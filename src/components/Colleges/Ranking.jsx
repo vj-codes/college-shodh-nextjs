@@ -48,13 +48,12 @@ function Ranking({
   // Handles changes in the city filter.
   const handleCityChange = (event) => {
     const city = event.target.value;
-  
+
     // Check if the selected city is already selected
     if (selectedCity === city) {
       // Deselect the city and clear the state
       setSelectedCity("");
       onStateChange(""); // Deselect the state
-      setSelectedState(""); // Clear the selected state
     } else {
       // Select the new city and its corresponding state
       const state = getStateByCity(city);
@@ -65,7 +64,7 @@ function Ranking({
       }
     }
   };
-  
+
 
   // Handles changes in the NBA accreditation filter.
   const handleNbaChange = (event) => {
@@ -143,34 +142,34 @@ function Ranking({
         ))}
       </div>
 
-     {/* City filter section */}
-<Grid item className="Inner-Topic">
-  <hr />
-  <h4 className="font-bold mb-2 sub-topic">Select City</h4>
-  <hr />
-</Grid>
-<div className="scrollable-container max-h-[300px] overflow-y-auto">
-  {selectedState ? (
-    statesWithCitiesIndia[selectedState]?.map((city) => (
-      <Grid item key={city}>
-        <FormControlLabel
-          className="Check-Box p-0 m-0 h-[25px]"
-          control={
-            <Checkbox
-              checked={selectedCity === city}
-              onChange={handleCityChange}
-              value={city}
-            />
-          }
-          label={city}
-          style={formControlLabelStyle}
-        />
+      {/* City filter section */}
+      <Grid item className="Inner-Topic">
+        <hr />
+        <h4 className="font-bold mb-2 sub-topic">Select City</h4>
+        <hr />
       </Grid>
-    ))
-  ) : (
-    <p className="text-gray-500 italic">Please select a state to see its cities.</p>
-  )}
-</div>
+      <div className="scrollable-container max-h-[300px] overflow-y-auto">
+        {selectedState ? (
+          statesWithCitiesIndia[selectedState]?.map((city) => (
+            <Grid item key={city}>
+              <FormControlLabel
+                className="Check-Box p-0 m-0 h-[25px]"
+                control={
+                  <Checkbox
+                    checked={selectedCity === city}
+                    onChange={handleCityChange}
+                    value={city}
+                  />
+                }
+                label={city}
+                style={formControlLabelStyle}
+              />
+            </Grid>
+          ))
+        ) : (
+          <p className="text-gray-500 italic">Please select a state to see its cities.</p>
+        )}
+      </div>
 
 
       {/* NAAC rating filter section */}
@@ -200,7 +199,7 @@ function Ranking({
       </div>
 
       {/* NIRF ranking filter section */}
-      <Grid item className="Inner-Topic">
+      {/* <Grid item className="Inner-Topic">
         <hr />
         <h2 className="font-bold mb-2 sub-topic">NIRF Ranking</h2>
         <hr />
@@ -214,10 +213,10 @@ function Ranking({
           max={200}
           step={1}
         />
-      </Grid>
+      </Grid> */}
 
       {/* NBA accreditation filter section */}
-      <Grid item className="Inner-Topic">
+      {/* <Grid item className="Inner-Topic">
         <hr />
         <h2 className="font-bold mb-2 sub-topic">NBA Accreditation</h2>
         <hr />
@@ -239,7 +238,7 @@ function Ranking({
             />
           </Grid>
         ))}
-      </div>
+      </div> */}
 
       {/* Clear Filters button */}
       <button
