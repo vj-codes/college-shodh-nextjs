@@ -1,5 +1,5 @@
 # CollegeShodh
-Descriptions
+This project focuses on building a comprehensive college listing website for India, emphasizing authentic information from government and accredited agencies like NAAC, NIRF, and NBA. Special attention will be given to STEM education, providing parents and students with verified insights into the quality of technical and scientific programs offered by institutions across the country.
 
 ## Features
 1. feature 1
