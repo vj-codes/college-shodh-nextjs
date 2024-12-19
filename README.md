@@ -1,24 +1,39 @@
-# EmailJS Setup Guide
+# CollegeShodh
+Descriptions
 
-Follow these steps to set up project using environment variables from the `.env.example` file.
+## Features
+1. feature 1
+2. feature 2
 
-## Step 1: Copy from `.env.example`
+## Tech Stack
 
-1. In the root directory of your project, locate the `.env.example` file.
-2. Copy this file and rename the copy to `.env` using the following command:
+### Frontend
+- **Languages**:  
+  - **JavaScript**  
+  - **CSS**
 
-```bash
-cp .env.example .env
-```
-## Step 2: Update .env File
-1. Open the newly created .env file and update the following fields with your EmailJS credentials:
+- **Frameworks**:  
+  - **[Next.js](https://nextjs.org/)** (15.0.2): React framework for server-side rendering and static site generation.  
+  - **[Tailwind CSS](https://tailwindcss.com/)** (3.4.1): Utility-first CSS framework for styling.
 
-``` bash
-NEXT_PUBLIC_EMAILJS_SERVICE_ID =  "your_service_id"
-NEXT_PUBLIC_EMAILJS_TEMPLATE_ID = "your_template_id"
-NEXT_PUBLIC_EMAILJS_PUBLIC_KEY = "your_public_key"
+- **Libraries**:  
+  - **[React](https://reactjs.org/)** (18.3.1) & **React DOM** (18.3.1): Core libraries for building the user interface.  
+  - **[Material-UI (MUI)](https://mui.com/)**:  
+    - **@mui/material-nextjs** (6.1.6): UI components for React.  
+    - **@mui/icons-material** (6.1.6): Material Design icons.  
+    - **@emotion/react** (11.13.3), **@emotion/styled** (11.13.0), and **@emotion/cache** (11.13.1): CSS-in-JS styling for MUI components.  
+  - **[React Hook Form](https://react-hook-form.com/)** (7.53.1): Form validation and state management.  
+  - **[React Icons](https://react-icons.github.io/react-icons/)** (5.3.0): Icon library for React.  
+  - **[React Spinners](https://www.npmjs.com/package/react-spinners)** (0.14.1): Loading spinner components.  
+  - **[Axios](https://axios-http.com/)** (1.7.7): Promise-based HTTP client for API requests.  
+  - **[EmailJS](https://www.emailjs.com/)** (@emailjs/browser 4.4.1): For sending emails directly from the browser.
 
-NEXT_PUBLIC_MONGO_ALTAS_URL = "your_mongo_atlas_url"
-```
+### Backend
+- **Language**:  
+  - **JavaScript**  
 
-2. Replace the placeholder values (your_service_id, your_template_id, your_public_key) with the actual values from your EmailJS account.
+- **Libraries**:  
+  - **[Mongoose](https://mongoosejs.com/)** (8.8.3): Object Data Modeling (ODM) library for MongoDB.
+
+### Database
+- **[MongoDB](https://www.mongodb.com/)**: NoSQL database used for storing and managing application data.
