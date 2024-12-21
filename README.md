@@ -1,6 +1,10 @@
 # CollegeShodh
 This project focuses on building a comprehensive college listing website for India, emphasizing authentic information from government and accredited agencies like NAAC, NIRF, and NBA. Special attention will be given to STEM education, providing parents and students with verified insights into the quality of technical and scientific programs offered by institutions across the country.
 
+## New Dev URL
+
+https://college-shodh-nextjs.vercel.app/ 
+
 ## Features
 1. STEM Focused College Listing. mainly made for students who have decided their stream. 
 2. Only focused on government/autonomous rankings, and providing authentic information about institutions.
