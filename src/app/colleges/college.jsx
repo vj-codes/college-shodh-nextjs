@@ -161,20 +161,20 @@ function Colleges() {
 
   return (
     <>
-      <div className="flex flex-col md:flex-row items-center justify-evenly mt-5">
-        <div className="relative">
+      <div className="flex flex-col  items-center justify-center mt-5">
+        <div className="flex justify-center items-center w-full px-4">
           <input
             type="text"
             id="search"
             value={search}
             onChange={handleOnSearch}
             placeholder="Search college"
-            className="p-2 h-11 w-96 mb-5 border border-black-400 rounded-2xl focus:outline-none focus:border-blue-600 text-center pl-10"
+            className="relative p-2 max-w-2xl w-full border border-black-400 rounded-lg focus:outline-none focus:border-blue-600 text-center "
           />
-          <SearchIcon className="absolute left-3 top-3 text-gray-400" />
+          <SearchIcon className=" -ml-8 z-10  text-gray-400" />
         </div>
-        <p className="md:mt-3 text-blue-700 font-bold font-sans text-xl">
-          Total Colleges Found: {totalCollegeCount}
+        <p className="md:mt-3 text-blue-600 font-bold font-sans text-xl">
+          Total Colleges Found:  {totalCollegeCount} 
         </p>
       </div>
 
