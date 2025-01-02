@@ -121,6 +121,7 @@ export const statesWithCitiesIndiaArray = Object.entries(statesWithCitiesIndia).
   })
 );
 
+
 // NAAC data
 export const naacOptions = [
   "NAAC A",
