@@ -9,6 +9,10 @@ import { MdEmail } from "react-icons/md";
 import Link from "next/link";
 
 export default function CollegeCard({ college }) {
+  console.log("College Name:", college.college_name);
+  console.log("NAAC Rating:", college.naac);
+  console.log("NBA Status:", college.nba);
+  console.log("NIRF Rank:", college.nirf);
   return (
     <div
       id="college-card"
@@ -37,41 +41,49 @@ export default function CollegeCard({ college }) {
         </div>
 
         {/* Right Column */}
-        <div className="w-full lg:w-1/2 flex flex-col space-y-2">
-          {/* NIRF Rank */}
-          <div className="flex items-center space-x-2">
-            <img
-              src="https://static.wixstatic.com/media/5e1aab_e511d9d14fb34d4da47f1e9eda71cf69~mv2.png/v1/fill/w_1360,h_378,al_c/NIRF.png"
-              alt="NIRF Logo"
-              className="w-12 h-12 object-contain"
-            />
-            <span className="text-sm text-gray-600">
-              <b>{college.nirf}</b>
-            </span>
-          </div>
-          {/* NBA */}
-          <div className="flex items-center space-x-4">
-            <img
-              src="https://www.tapmi.edu.in/wp-content/uploads/2016/02/nba-logo-300x103.png"
-              alt="NBA Logo"
-              className="w-12 h-12 object-contain"
-            />
-            <span className="text-sm text-gray-600">
-              <b>{college.nba}</b>
-            </span>
-          </div>
-          {/* NAAC */}
-          <div className="flex items-center space-x-4">
-            <img
-              src="https://i0.wp.com/sjbit.edu.in/wp-content/uploads/2021/07/NAAC-Logo-250x250-1.png?ssl=1"
-              alt="NAAC Logo"
-              className="w-12 h-12 object-contain"
-            />
-            <span className="text-sm text-gray-600">
-               {college.naac}
-            </span>
-          </div>
-        </div>
+<div className="w-full lg:w-1/2 flex flex-col space-y-2">
+  {/* NAAC */}
+  {college.naac && college.naac !== "NULL" && (
+    <div className="flex items-center space-x-4">
+      <img
+        src="https://i0.wp.com/sjbit.edu.in/wp-content/uploads/2021/07/NAAC-Logo-250x250-1.png?ssl=1"
+        alt="NAAC Logo"
+        className="w-12 h-12 object-contain"
+      />
+      <span className="text-sm text-gray-600">
+        {college.naac}
+      </span>
+    </div>
+  )}
+  
+  {/* NBA */}
+  {college.nba && college.nba !== "NULL" && (
+    <div className="flex items-center space-x-4">
+      <img
+        src="https://www.tapmi.edu.in/wp-content/uploads/2016/02/nba-logo-300x103.png"
+        alt="NBA Logo"
+        className="w-12 h-12 object-contain"
+      />
+      <span className="text-sm text-gray-600">
+        <b>{college.nba}</b>
+      </span>
+    </div>
+  )}
+
+  {/* NIRF Rank */}
+  {college.nirf && college.nirf !== "NULL" && (
+    <div className="flex items-center space-x-2">
+      <img
+        src="https://static.wixstatic.com/media/5e1aab_e511d9d14fb34d4da47f1e9eda71cf69~mv2.png/v1/fill/w_1360,h_378,al_c/NIRF.png"
+        alt="NIRF Logo"
+        className="w-12 h-12 object-contain"
+      />
+      <span className="text-sm text-gray-600">
+        <b>{college.nirf}</b>
+      </span>
+    </div>
+  )}
+</div>
       </div>
 
       {/* Divider */}
