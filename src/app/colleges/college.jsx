@@ -204,7 +204,7 @@ function Colleges() {
       <h1 className="text-xl font-bold text-black flex justify-center font-mono">
         {selectedCourse ? (
           <> 
-          <p className="w-full text-left text-xl px-2">
+          <p className="w-full text-center text-xl px-2">
             Follow Your Passion in:
             <span className="text-orange-600 underline">{selectedCourse}</span>
           </p>
