@@ -3,6 +3,7 @@ import './globals.css';
 import Footer from '@/components/footer/Footer';
 import { SearchProvider } from '@/context/SearchContext';
 import { CollegeProvider } from '@/context/CollegContext';
+import { Analytics } from '@vercel/analytics/next';
 
 export const metadata = {
   title: 'Next.js',
@@ -17,6 +18,7 @@ export default function RootLayout({ children }) {
           <CollegeProvider>
           <Header />
           {children}
+          <Analytics />
           <Footer />
           </CollegeProvider>
         </SearchProvider>
