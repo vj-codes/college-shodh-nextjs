@@ -136,42 +136,87 @@ const MyModal = ({ closeModal, type }) => {
   const startIndex = currentPage * coursesPerPage;
   const endIndex = startIndex + coursesPerPage;
   const currentCourses = courses.slice(startIndex, endIndex);
-
   return (
     <>
-      <div className="modal-wrapper fixed top-0 left-0 bottom-0 right-0 bg-[rgba(201,193,193,0.9)]" 
-      onClick={closeModal}></div>
-      <div className="modal-container h-[32rem] w-[60rem] fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white rounded-lg shadow-lg p-8">
-        <h1 className="font-mono m-[1rem] text-2xl font-bold text-gray-800 text-center">
-          {type === "BSc" ? "B. Sc Courses" : "BE/B. Tech Courses"}
-        </h1>
-        {currentCourses.map((course, index) => (
-          <button className="model-btn h-[8rem] w-[12rem] border-1 border rounded-lg m-2 p-2 cursor-pointer hover:bg-[#e7a759] hover:text-white hover:scale-105 transition-all duration-100"
-           onClick={() => {
-                  closeModal(course)
-            }
-          } key={index}>
-            <img src={course.img} alt={course.name}
-              className="h-8 w-8 ml-16 mb-2"
-            />
-            <span className="font-normal">{course.name}</span>
-          </button>
-        ))}
-        <div className="pagination flex justify-between mt-4">
-          <button onClick={handlePrev} disabled={currentPage === 0}
-          className="bg-[#007bff] text-white border-none p-[10px] cursor-pointer rounded-lg disabled:bg-[#cccccc] disabled:cursor-not-allowed"
+      {/* Background Overlay  */}
+      <div
+        className="modal-wrapper fixed inset-0 bg-[rgba(201,193,193,0.9)] z-40"
+        onClick={closeModal}
+      ></div>
+  
+      <div className="modal-container absolute inset-0 flex items-center justify-center z-50 px-4">
+        <div
+          className="relative bg-white rounded-lg shadow-lg p-6 max-w-4xl w-full max-h-[90vh] overflow-y-auto sm:p-8 md:p-10"
+          
+        >
+          {/* Close Button */}
+          <button
+            className="absolute top-4 right-4 text-gray-500 hover:text-gray-700 transition-colors"
+            onClick={closeModal}
+            aria-label="Close Modal"
           >
-            &lt; Prev
-          </button>
-          <button onClick={handleNext} disabled={endIndex >= courses.length}
-            className="bg-[#007bff] text-white border-none p-[10px] cursor-pointer rounded-lg disabled:bg-[#cccccc] disabled:cursor-not-allowed"
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth="2"
+              stroke="currentColor"
+              className="w-6 h-6"
             >
-            Next &gt;
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
           </button>
+  
+          <h1 className="font-mono mb-6 text-2xl font-bold text-gray-800 text-center">
+            {type === "BSc" ? "B. Sc Courses" : "BE/B. Tech Courses"}
+          </h1>
+  
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+            {currentCourses.map((course, index) => (
+              <button
+                className="model-btn flex flex-col items-center justify-center h-32 sm:h-40 p-4 border border-gray-300 rounded-lg cursor-pointer hover:bg-[#e7a759] hover:text-white hover:scale-105 transition-all duration-200"
+                onClick={() => closeModal(course)}
+                key={index}
+              >
+                <img
+                  src={course.img}
+                  alt={course.name}
+                  className="h-10 w-10 mb-2"
+                />
+                <span className="text-sm sm:text-base font-medium">
+                  {course.name}
+                </span>
+              </button>
+            ))}
+          </div>
+  
+          {/* Pagination */}
+          <div className="pagination flex justify-between items-center mt-6">
+            <button
+              onClick={handlePrev}
+              disabled={currentPage === 0}
+              className="bg-[#007bff] hover:bg-blue-500  text-white px-6 py-2 rounded-lg disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
+            >
+              &lt; Prev
+            </button>
+            <button
+              onClick={handleNext}
+              disabled={endIndex >= courses.length}
+              className="bg-[#007bff] hover:bg-blue-500 text-white px-6 py-2 rounded-lg disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
+            >
+              Next &gt;
+            </button>
+          </div>
         </div>
       </div>
     </>
   );
+  
+  
 };
 
 export default MyModal;
