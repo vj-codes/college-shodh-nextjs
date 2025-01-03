@@ -1,5 +1,6 @@
-"use client"
+"use client";
 import Link from "next/link";
+import { usePathname } from "next/navigation"; // For app directory
 import React, { useState, useEffect, useRef } from "react";
 
 const navItems = [
@@ -10,20 +11,18 @@ const navItems = [
 ];
 
 export default function Header() {
+  const pathname = usePathname(); // Get the current path
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef(null);
 
- 
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);
   };
 
-  
   const closeMenu = () => {
     setMenuOpen(false);
   };
 
- 
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (menuRef.current && !menuRef.current.contains(event.target)) {
@@ -47,14 +46,14 @@ export default function Header() {
       <nav className="bg-white border-gray-200 px-4 md:px-6 py-2.5">
         <div className="flex flex-wrap justify-between items-center mx-auto max-w-screen-xl">
           <div>
-            <Link href="/" >
-            <div className="flex items-center">
-              <img
-                src="Collegeshodh logo_page-0001.png"
-                className="mr-3 h-15 w-20"
-                alt="Logo"
+            <Link href="/">
+              <div className="flex items-center">
+                <img
+                  src="Collegeshodh logo_page-0001.png"
+                  className="mr-3 h-15 w-20"
+                  alt="Logo"
                 />
-                </div>
+              </div>
             </Link>
           </div>
 
@@ -64,6 +63,11 @@ export default function Header() {
               <Link
                 key={index}
                 href={item.to}
+                className={`${
+                  pathname === item.to
+                    ? "text-orange-500 font-bold underline"
+                    : "text-gray-700"
+                } hover:text-orange-500`}
               >
                 {item.label}
               </Link>
@@ -75,10 +79,9 @@ export default function Header() {
               href="https://entechonline.com/"
               target="_blank"
               rel="noopener noreferrer"
-            > 
+            >
               <button className="hidden md:block text-white bg-orange-500 hover:bg-orange-700 font-medium rounded-lg text-sm px-4 md:px-5 py-2 md:py-2.5 mr-2 focus:outline-none">
-
-              Explore Your Passion
+                Explore Your Passion
               </button>
             </Link>
           </div>
@@ -104,19 +107,21 @@ export default function Header() {
               </svg>
             </button>
             <ul className="flex flex-col mt-4 font-medium">
-              {/* Render navigation links */}
               {navItems.map((item, index) => (
                 <li key={index} className="ml-8">
                   <Link
                     href={item.to}
-                    
                     onClick={closeMenu}
+                    className={`${
+                      pathname === item.to
+                        ? "text-orange-500 font-bold underline"
+                        : "text-gray-700"
+                    } hover:text-orange-500`}
                   >
                     {item.label}
                   </Link>
                 </li>
               ))}
-              {/* Mobile-specific link */}
               <li className="block md:hidden mt-4 ml-8">
                 <Link
                   href="https://entechonline.com/"
@@ -124,9 +129,8 @@ export default function Header() {
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  <button className="text-white bg-orange-500 hover:bg-orange-700 font-medium rounded-lg text-sm px-4 py-2 focus:outline-none"
-                  >
-                  Explore Your Passion
+                  <button className="text-white bg-orange-500 hover:bg-orange-700 font-medium rounded-lg text-sm px-4 py-2 focus:outline-none">
+                    Explore Your Passion
                   </button>
                 </Link>
               </li>
