@@ -1,20 +1,9 @@
-"use client"
-
-import FAQs from "@/components/home/FAQs";
-import Home from "@/components/home/Home";
-import Programs from "@/components/home/Programs";
-import TopCities from "@/components/home/TopCities";
-
-const HomePage = () => {
+import React from 'react'
+import Home from '@/app/home/page'
+const page = () => {
   return (
-    <>
-      <Home />
-      <Programs />
-      <TopCities />
-      {/* <HomeBlog /> */}
-      <FAQs />
-    </>
-  );
-};
+    <div><Home/></div>
+  )
+}
 
-export default HomePage;
+export default page
