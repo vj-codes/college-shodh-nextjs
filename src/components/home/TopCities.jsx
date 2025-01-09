@@ -1,14 +1,14 @@
-"use client"
+"use client";
 import { CollegeContext } from "@/context/CollegContext";
 import Link from "next/link";
 import React, { useContext, useState } from "react";
-
 
 const TopCities = () => {
   const [startIndex, setStartIndex] = useState(0);
   const citiesPerPage = 5;
 
-  const {selectedCity, setSelectedCity, selectedCourse, setSelectedCourse} = useContext(CollegeContext)
+  const { selectedCity, setSelectedCity, selectedCourse, setSelectedCourse } =
+    useContext(CollegeContext);
 
   const handleNext = () => {
     if (startIndex + citiesPerPage < cities.length) {
@@ -22,11 +22,9 @@ const TopCities = () => {
     }
   };
 
-
   const handleCityClick = (cityName) => {
     setSelectedCity(cityName);
   };
-
 
   const cities = [
     { name: "Kolkata", img: "./cities/kolkata.png" },
@@ -76,7 +74,8 @@ const TopCities = () => {
               <Link href={`/colleges?city=${city.name}`} key={index}>
                 <button
                   onClick={() => handleCityClick(city.name)}
-                 className="h-28 w-44 border border-black rounded-lg flex flex-col items-center justify-center">
+                  className="h-28 w-44 border border-black rounded-lg flex flex-col items-center justify-center"
+                >
                   <img
                     src={city.img}
                     alt={city.name}

@@ -1,25 +1,24 @@
-"use client"
+"use client";
 
 import React, { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { MdEmail } from "react-icons/md";
-import emailjs from '@emailjs/browser';
+import emailjs from "@emailjs/browser";
 import SnackbarComponent from "@/components/Toast";
-function ContactUs() {
+import Seo from "@/components/SEO";
+import { seoData } from "@/data/SeoData";
 
-  const emailAddress = "coneixementindia@gmail.com";
-  const emailStyle = {
-    color: "blue",
-  };
+const emailAddress = "coneixementindia@gmail.com";
+const emailStyle = { color: "blue" };
 
+const ContactUs = () => {
   const [snackbar, setSnackbar] = useState({
     open: false,
     message: "",
-    severity: "", 
+    severity: "",
   });
 
   const contactForm = useRef();
-
   const {
     register,
     handleSubmit,
@@ -27,16 +26,14 @@ function ContactUs() {
     formState: { errors },
   } = useForm();
 
-  const sendEmail = async(data, event) => {
+  const sendEmail = async (data, event) => {
     event.preventDefault();
     try {
-      const result = await emailjs.sendForm(
+      await emailjs.sendForm(
         process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID,
         process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID,
         contactForm.current,
-        {
-          publicKey: process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY,
-        }
+        { publicKey: process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY }
       );
       setSnackbar({
         open: true,
@@ -45,8 +42,7 @@ function ContactUs() {
       });
       reset();
     } catch (error) {
-    //   alert("Sorry for the inconvenience. Please email abc@email.com for your query.")
-      console.log('FAILED...', error);
+      console.error("FAILED...", error);
       setSnackbar({
         open: true,
         message: "Message not sent. Please try again later.",
@@ -55,12 +51,35 @@ function ContactUs() {
     }
   };
 
-  const handleCloseSnackbar = () => {
+  const handleCloseSnackbar = () =>
     setSnackbar((prev) => ({ ...prev, open: false }));
-  };
+
+  const InputField = ({
+    label,
+    id,
+    type,
+    placeholder,
+    error,
+    registerOptions,
+  }) => (
+    <div>
+      <label className="sr-only" htmlFor={id}>
+        {label}
+      </label>
+      <input
+        className={`w-full rounded-lg border-gray-200 p-3 text-sm ${error ? "border-red-500" : ""}`}
+        id={id}
+        type={type}
+        placeholder={placeholder}
+        {...register(id, registerOptions)}
+      />
+      {error && <p className="text-red-500 text-sm">{error.message}</p>}
+    </div>
+  );
 
   return (
     <>
+      <Seo page={"contact"} customData={seoData.contact} />
       <SnackbarComponent
         message={snackbar.message}
         severity={snackbar.severity}
@@ -78,106 +97,77 @@ function ContactUs() {
                   gives you confidence that we will only recommend what is right
                   for you.
                 </p>
-
                 <div className="mt-8">
-
                   <p className="mt-2 not-italic text-orange-600 text-left flex items-center pl-40">
-                    <MdEmail className="text-orange-400 size-5 mr-1" />{" "}
-                    info@collegeshodh.in
+                    <MdEmail className="text-orange-400 size-5 mr-1" />
+                    {emailAddress}
                   </p>
                 </div>
               </div>
-
               <div className="rounded-lg bg-gray-200 p-8 shadow-lg lg:col-span-3 lg:p-12">
                 <h1 className="text-2xl font-bold pb-4">Get in Touch</h1>
-                <form ref={contactForm} action="#" className="space-y-4" onSubmit={handleSubmit(sendEmail)}>
-                  <div>
-                    <label className="sr-only" htmlFor="name">
-                      Name
-                    </label>
-                    <input
-                      className={`w-full rounded-lg border-gray-200 p-3 text-sm ${
-                        errors.name ? "border-red-500" : ""
-                      }`}
-                      placeholder="Name"
-                      type="text"
-                      id="name"
-                      {...register("name", { required: "Name is required" })}
-                    />
-                    {errors.name && (
-                      <p className="text-red-500 text-sm">{errors.name.message}</p>
-                    )}
-                  </div>
-
+                <form
+                  ref={contactForm}
+                  className="space-y-4"
+                  onSubmit={handleSubmit(sendEmail)}
+                >
+                  <InputField
+                    label="Name"
+                    id="name"
+                    type="text"
+                    placeholder="Name"
+                    error={errors.name}
+                    registerOptions={{ required: "Name is required" }}
+                  />
                   <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                    <div>
-                      <label className="sr-only" htmlFor="email">
-                        Email
-                      </label>
-                      <input
-                        className={`w-full rounded-lg border-gray-200 p-3 text-sm ${
-                          errors.email ? "border-red-500" : ""
-                        }`}
-                        placeholder="Email address"
-                        type="email"
-                        id="email"
-                        {...register("email", {
-                          required: "Email is required",
-                          pattern: {
-                            value: /^\S+@\S+$/i,
-                            message: "Invalid email address",
-                          },
-                        })}
-                      />
-                      {errors.email && (
-                        <p className="text-red-500 text-sm">{errors.email.message}</p>
-                      )}
-                    </div>
-
-                    <div>
-                      <label className="sr-only" htmlFor="phone">
-                        Phone
-                      </label>
-                      <input
-                        className={`w-full rounded-lg border-gray-200 p-3 text-sm ${
-                          errors.phone ? "border-red-500" : ""
-                        }`}
-                        placeholder="Phone Number"
-                        type="tel"
-                        id="phone"
-                        {...register("phone", {
-                          required: "Phone number is required",
-                          pattern: {
-                            value: /^[0-9]{10}$/,
-                            message: "Phone number must be 10 digits",
-                          },
-                        })}
-                      />
-                      {errors.phone && (
-                        <p className="text-red-500 text-sm">{errors.phone.message}</p>
-                      )}
+                    <InputField
+                      label="Email"
+                      id="email"
+                      type="email"
+                      placeholder="Email address"
+                      error={errors.email}
+                      registerOptions={{
+                        required: "Email is required",
+                        pattern: {
+                          value: /^\S+@\S+$/i,
+                          message: "Invalid email address",
+                        },
+                      }}
+                    />
+                    <InputField
+                      label="Phone"
+                      id="phone"
+                      type="tel"
+                      placeholder="Phone Number"
+                      error={errors.phone}
+                      registerOptions={{
+                        required: "Phone number is required",
+                        pattern: {
+                          value: /^[0-9]{10}$/,
+                          message: "Phone number must be 10 digits",
+                        },
+                      }}
+                    />
                   </div>
-                </div>
-
                   <div>
                     <label className="sr-only" htmlFor="message">
                       Message
                     </label>
-
                     <textarea
-                      className={`w-full rounded-lg border-gray-200 p-3 text-sm ${
-                        errors.message ? "border-red-500" : ""
-                      }`}
+                      className={`w-full rounded-lg border-gray-200 p-3 text-sm ${errors.message ? "border-red-500" : ""}`}
+                      id="message"
                       placeholder="Message"
                       rows="8"
-                      id="message"
-                      {...register("message", { required: "Message is required" })}
-                    ></textarea>
+                      {...register("message", {
+                        required: "Message is required",
+                      })}
+                    />
                     {errors.message && (
-                      <p className="text-red-500 text-sm">{errors.message.message}</p>
+                      <p className="text-red-500 text-sm">
+                        {errors.message.message}
+                      </p>
                     )}
                   </div>
-
                   <div className="mt-4">
                     <button
                       type="submit"
@@ -191,10 +181,9 @@ function ContactUs() {
             </div>
           </div>
         </section>
-        
       </div>
     </>
   );
-}
+};
 
 export default ContactUs;
