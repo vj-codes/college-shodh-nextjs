@@ -6,7 +6,7 @@ import React, { useState, useEffect, useRef } from "react";
 const navItems = [
   { label: "Home", to: "/" },
   { label: "About us", to: "/about" },
-  { label: "Rankings", to: "/colleges" },
+  { label: "Colleges", to: "/colleges" },
   { label: "Contact Us", to: "/contact" },
 ];
 
