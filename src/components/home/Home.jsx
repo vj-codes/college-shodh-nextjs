@@ -3,6 +3,7 @@ import React, { useState, useEffect, useContext } from "react";
 import { IoArrowForwardOutline } from "react-icons/io5";
 import { SearchContext } from "@/context/SearchContext";
 import { redirect } from "next/navigation";
+import Image from "next/image";
 
 // Import images
 import barch_image from "../../assets/barch-min.jpg";
@@ -57,8 +58,23 @@ export default function Home() {
       <div
         id="image"
         className="relative h-[36.3rem] bg-cover bg-center bg-[rgba(0,0,0,0.4)] bg-blend-darken"
-        style={{ backgroundImage: `url(${BackgroundImages[bgIndex].src})` }}
+        style={{
+          backgroundImage: `url(${BackgroundImages[bgIndex].src})`,
+        }}
       >
+        {/* Preload Images */}
+        <div className="hidden">
+          {BackgroundImages.map((img, idx) => (
+            <Image
+              key={idx}
+              src={img}
+              alt={`Background ${idx}`}
+              priority={idx === 0}
+              placeholder="blur"
+              quality={75}
+            />
+          ))}
+        </div>
         <div className="absolute inset-0 bg-black opacity-40"></div>
         <div className="relative flex flex-col items-start justify-center h-full px-4 md:px-24">
           <div className="text-white text-left">
@@ -99,7 +115,9 @@ export default function Home() {
               {Options.map((option, index) => (
                 <div
                   key={index}
-                  className={`text-left text-lg md:text-3xl font-sans font-semibold text-gray-800 mb-2 mr-40 ${optionIndex === index ? "font-bold text-orange-600" : "text-white"}`}
+                  className={`text-left text-lg md:text-3xl font-sans font-semibold text-gray-800 mb-2 mr-40 ${
+                    optionIndex === index ? "font-bold text-orange-600" : "text-white"
+                  }`}
                 >
                   {option.text}
                 </div>
