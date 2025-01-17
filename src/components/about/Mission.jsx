@@ -85,9 +85,9 @@ const Mission = () => {
 
 // Wrapping the Mission component in Suspense to show skeleton loader while loading data
 const MissionWithSkeleton = () => (
-  <Suspense fallback={<SkeletonLoader />}>
+  // <Suspense fallback={<SkeletonLoader />}>
     <Mission />
-  </Suspense>
+  // </Suspense>
 );
 
 export default MissionWithSkeleton;
