@@ -8,6 +8,7 @@ const navItems = [
   { label: "About us", to: "/about" },
   { label: "Colleges", to: "/colleges" },
   { label: "Contact Us", to: "/contact" },
+  { label: "Blogs", to: "/blog" },
 ];
 
 export default function Header() {
