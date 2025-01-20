@@ -55,7 +55,7 @@ const BackLink = () => (
 // Post Image Component
 const PostImage = ({ image }) => {
   const postImageUrl = image
-    ? urlFor(image.asset).width(1200).height(675).url()
+    ? urlFor(image.asset).width(550).height(310).url()
     : null;
   return (
     postImageUrl && (
