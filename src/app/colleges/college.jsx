@@ -214,78 +214,76 @@ function Colleges() {
         )}
       </h1>
 
-      <div className="flex w-full justify-between">
-        <div
-          className={
-            `
-        z-[1000] md:z-0 overflow-auto
-        w-full md:static
-        fixed top-0 bottom-0 left-0 right-0
-        py-64 md:py-0
-        bg-[rgba(0,0,0,0.5)] md:bg-transparent
-        md:w-1/3
-        md:ml-4 lg:ml-32
-        md:my-4
-        ` + (openFilters ? "block" : "hidden md:block")
-          }
-        >
-          <Ranking
-            filterNaac={filterNaac}
-            handleNaacFilter={handleNaacFilter}
-            sortOrder={sortOrder}
-            handleSortChange={handleSortChange}
-            onStateChange={handleStateChange}
-            openFilters={openFilters}
-            setOpenFilters={setOpenFilters}
-          />
-        </div>
+      <div className="flex w-full justify-between gap-4">
+  {/* Filter Section */}
+  <div
+    className={
+      `
+      z-[1000] md:z-0 overflow-auto
+      w-full md:w-1/3
+      md:ml-4 lg:ml-32
+      md:my-4
+      fixed md:static
+      bg-[rgba(0,0,0,0.5)] md:bg-transparent
+      md:h-screen
+      ` + (openFilters ? "block" : "hidden md:block")
+    }
+    style={{ position: "sticky", top: "4rem" }}
+  >
+    <Ranking
+      filterNaac={filterNaac}
+      handleNaacFilter={handleNaacFilter}
+      sortOrder={sortOrder}
+      handleSortChange={handleSortChange}
+      onStateChange={handleStateChange}
+      openFilters={openFilters}
+      setOpenFilters={setOpenFilters}
+    />
+  </div>
 
-        <div className="w-full flex flex-col mt-3 items-start justify-start ">
-          <button
-            className="bg-blue-500 text-white p-2 rounded-md md:w-[70%] w-[95%] mx-auto mb-4 hover:bg-blue-700 md:hidden"
-            onClick={() => setOpenFilters(!openFilters)}
-          >
-            Filters
-          </button>
+  {/* College Cards Section */}
+  <div className="w-full md:w-2/3 flex flex-col mt-3">
+    <button
+      className="bg-blue-500 text-white p-2 rounded-md md:w-[70%] w-[95%] mx-auto mb-4 hover:bg-blue-700 md:hidden"
+      onClick={() => setOpenFilters(!openFilters)}
+    >
+      Filters
+    </button>
 
-          {loading ? (
-            <div className="flex justify-center items-start h-full w-full pt-20">
-              <HashLoader
-                size={100}
-                color={"orange"}
-                loading={loading}
-                cssOverride={override}
-              />
-            </div>
-          ) : (
-            !loading &&
-              Array.isArray(colleges) &&
-              colleges.length > 0 ? (
-              colleges.map((college) => (
-                <CollegeCard key={college._id} college={college} />
-              ))
-            ) : (
-              <div className="flex justify-center items-start  w-full  pt-20">
-                <p className="text-center text-gray-500">No colleges found</p>
-              </div>
-            )
-          )}
-          {
-            totalPages === 0 ? null
-              :
-              (
-                <div className="w-full flex justify-center items-center p-8 pr-8 md:pr-32">
-                <Pagination
-                  currentPage={currentPage}
-                  totalPages={totalPages}
-                  onPageChange={handlePageChange}
-                  />
-                </div>
-              )
-          }
-        </div>
-        {showModal && <MyModal closeModal={closeModal} type={selectedType} />}
+    {loading ? (
+      <div className="flex justify-center items-start h-full w-full pt-20">
+        <HashLoader
+          size={100}
+          color={"orange"}
+          loading={loading}
+          cssOverride={override}
+        />
       </div>
+    ) : (
+      !loading &&
+      Array.isArray(colleges) &&
+      colleges.length > 0 ? (
+        colleges.map((college) => (
+          <CollegeCard key={college._id} college={college} />
+        ))
+      ) : (
+        <div className="flex justify-center items-start w-full pt-20">
+          <p className="text-center text-gray-500">No colleges found</p>
+        </div>
+      )
+    )}
+    {totalPages > 0 && (
+      <div className="w-full flex justify-center items-center p-8 pr-8 md:pr-32">
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={handlePageChange}
+        />
+      </div>
+    )}
+  </div>
+</div>
+
     </>
   );
 }
