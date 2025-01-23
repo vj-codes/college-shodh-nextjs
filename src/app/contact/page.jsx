@@ -89,22 +89,9 @@ const ContactUs = () => {
       <div>
         <section className="bg-gray-100">
           <div className="mx-auto max-w-screen-xl px-4 py-16 sm:px-6 lg:px-8">
-            <div className="grid grid-cols-1 gap-x-16 gap-y-8 lg:grid-cols-5">
-              <div className="lg:col-span-2 lg:py-12">
-                <p className="max-w-xl text-lg text-justify">
-                  At the same time, the fact that we are wholly owned and
-                  totally independent from manufacturer and other group control
-                  gives you confidence that we will only recommend what is right
-                  for you.
-                </p>
-                <div className="mt-8">
-                  <p className="mt-2 not-italic text-orange-600 text-left flex items-center pl-40">
-                    <MdEmail className="text-orange-400 size-5 mr-1" />
-                    {emailAddress}
-                  </p>
-                </div>
-              </div>
-              <div className="rounded-lg bg-gray-200 p-8 shadow-lg lg:col-span-3 lg:p-12">
+            <div className="gap-x-16 gap-y-8 lg:grid-cols-5">
+           
+              <div className="rounded-lg bg-gray-200 p-8 shadow-lg max-w-3xl mx-auto lg:col-span-3 lg:p-12">
                 <h1 className="text-2xl font-bold pb-4">Get in Touch</h1>
                 <form
                   ref={contactForm}
