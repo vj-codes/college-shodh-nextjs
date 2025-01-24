@@ -180,25 +180,28 @@ function Colleges() {
 
       {/* buttons */}
       <div className="flex flex-col items-center">
-        <div className=" mt-5 mb-5 mx-auto btn-container md:flex justify-center gap-x-4 gap-y-2 grid grid-cols-3">
-          {Options.map((option, index) => (
-            <button
-              className={`h-12 w-32 border border-black-100 rounded-md hover:drop-shadow-lg ${selectedCourse === option.course ? 'bg-orange-600' : 'bg-[#1976D2]'}`}
-              onClick={() => {
-                if (option.text === "B. Sc" || option.text === "BE/B. Tech") {
-                  openModal(option.text === "B. Sc" ? "BSc" : "BE/B. Tech");
-                } else {
-                  handleCourseChange({ name: option.course });
-                }
-              }}
-            >
-              <p className="flex justify-center items-center gap-x-2 hover:underline text-white font-medium">
-                {option.text}
+      <div className="mt-5 mb-5 mx-auto btn-container grid grid-cols-3 gap-2 px-2 md:flex md:justify-center md:gap-x-4 md:gap-y-2">
+  {Options.map((option, index) => (
+    <button
+      key={index}
+      className={`h-12 w-32 border border-black-100 rounded-md hover:drop-shadow-lg ${
+        selectedCourse === option.course ? 'bg-orange-600' : 'bg-[#1976D2]'
+      }`}
+      onClick={() => {
+        if (option.text === "B. Sc" || option.text === "BE/B. Tech") {
+          openModal(option.text === "B. Sc" ? "BSc" : "BE/B. Tech");
+        } else {
+          handleCourseChange({ name: option.course });
+        }
+      }}
+    >
+      <p className="flex justify-center items-center gap-x-2 hover:underline text-white font-medium">
+        {option.text}
+      </p>
+    </button>
+  ))}
+</div>
 
-              </p>
-            </button>
-          ))}
-        </div>
       </div>
 
       <h1 className="text-xl font-bold text-black flex justify-center font-mono">
@@ -217,19 +220,19 @@ function Colleges() {
       <div className="flex w-full justify-between gap-4">
   {/* Filter Section */}
   <div
-    className={
-      `
-      z-[1000] md:z-0 overflow-auto
-      w-full md:w-1/3
-      md:ml-4 lg:ml-32
-      md:my-4
-      fixed md:static
-      bg-[rgba(0,0,0,0.5)] md:bg-transparent
-      md:h-screen
-      ` + (openFilters ? "block" : "hidden md:block")
-    }
-    style={{ position: "sticky", top: "4rem" }}
-  >
+  className={
+    `
+    z-[1000] md:z-0 overflow-auto
+    w-full md:w-1/4
+    md:ml-4 lg:ml-32
+    md:my-4
+    fixed md:relative
+    bg-[rgba(0,0,0,0.5)] md:bg-transparent
+    md:h-screen
+    ` + (openFilters ? "block" : "hidden md:block")
+  }
+>
+
     <Ranking
       filterNaac={filterNaac}
       handleNaacFilter={handleNaacFilter}
@@ -242,7 +245,7 @@ function Colleges() {
   </div>
 
   {/* College Cards Section */}
-  <div className="w-full md:w-2/3 flex flex-col mt-3">
+  <div className="w-full md:w-3/4 flex flex-col mt-3">
     <button
       className="bg-blue-500 text-white p-2 rounded-md md:w-[70%] w-[95%] mx-auto mb-4 hover:bg-blue-700 md:hidden"
       onClick={() => setOpenFilters(!openFilters)}
