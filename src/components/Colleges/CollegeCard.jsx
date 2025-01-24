@@ -9,10 +9,10 @@ import { MdEmail } from "react-icons/md";
 import Link from "next/link";
 
 export default function CollegeCard({ college }) {
-  console.log("College Name:", college.college_name);
-  console.log("NAAC Rating:", college.naac);
-  console.log("NBA Status:", college.nba);
-  console.log("NIRF Rank:", college.nirf);
+  // console.log("College Name:", college.college_name);
+  // console.log("NAAC Rating:", college.naac);
+  // console.log("NBA Status:", college.nba);
+  // console.log("NIRF Rank:", college.nirf);
   return (
     <div
       id="college-card"

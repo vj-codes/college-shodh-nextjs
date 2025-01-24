@@ -51,16 +51,15 @@ const Programs = () => {
       </div>
 
       <div className="text-left ml-32 mt-8">
-        <p className="font-bold text-xl">Explore Programs</p>
+        <p className="text-2xl font-semibold">Explore Programs</p>
       </div>
 
       <div className="mt-5 mb-5 flex flex-wrap justify-center gap-4">
         {Options.map((option, index) => (
-          <Link  href={`/colleges`} key={index}>
+          <Link href={`/colleges`} key={index}>
             <button
               onClick={() => handleCityClick(option.course)}
               className="h-28 w-52 bg-gray-200 border border-black rounded-lg flex flex-col items-center justify-center hover:shadow-xl hover:bg-slate-300 transition-all"
-              
             >
               <img
                 src={option.img}
