@@ -76,13 +76,11 @@ export default function Home() {
   }, []);
 
   return (
-    <div>
-   
-
+    <div className=" pb-8">
       {/* Programs Section */}
-      <div className="text-center mt-8">
+      <div className=" text-center  mt-8">
         <div className="text-lg sm:text-xl lg:text-2xl font-semibold mb-4">
-          Programs
+          Explore Programs
         </div>
         <div className="flex flex-wrap gap-4 justify-center mx-4">
           {Options.map((option, index) => (

@@ -44,16 +44,15 @@ const TopCities = () => {
   }
 
   return (
-    <div className="text-center pb-8">
-      <div className="text-left ml-4 sm:ml-10 lg:ml-32 mt-4 sm:mt-8">
+    <div className="pb-8">
+      <div className="text-center mt-4 sm:mt-8">
         <p className="text-lg sm:text-xl lg:text-2xl font-semibold">
           Top Cities
         </p>
       </div>
 
-      <div className="flex  sm:flex-row justify-center items-center mb-4 gap-4">
+      <div className="flex sm:flex-row justify-center items-center mb-4 gap-4">
         {/* Previous Button */}
-
         <button
           onClick={handlePrev}
           disabled={startIndex === 0}
@@ -76,6 +75,7 @@ const TopCities = () => {
             />
           </svg>
         </button>
+
         {/* Carousel Items */}
         <div className="flex flex-wrap gap-4 justify-center items-center mx-4 mt-5 mb-5">
           {displayedCities.map((city, index) =>
