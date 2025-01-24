@@ -1,12 +1,9 @@
-// "use client"
 import Grid from "@mui/material/Grid";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
-import Slider from "@mui/material/Slider";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { naacOptions, statesWithCitiesIndia, statesWithCitiesIndiaArray } from "@/data/collegeData";
 
-// Ranking component is used to display and manage filters for colleges based on various criteria.
 function Ranking({
   filterNaac,
   handleNaacFilter,
@@ -16,46 +13,39 @@ function Ranking({
   onNbaFilter,
   openFilters,
   setOpenFilters
-
 }) {
-  // State variables for managing user selections.
+
   const [selectedState, setSelectedState] = useState("");
   const [selectedCity, setSelectedCity] = useState("");
   const [nirfRanking, setNirfRanking] = useState([0, 200]);
   const [nbaAccreditation, setNbaAccreditation] = useState("");
 
-  // Handles changes in the state filter.
   const handleStateChange = (event) => {
     const selectedValue = event.target.value;
-    // If the selected state is already selected, deselect it
+
     if (selectedState === selectedValue) {
       setSelectedState("");
-      onStateChange(""); // 
+      onStateChange("");
       setSelectedCity("");
     } else {
       setSelectedState(selectedValue);
-      onStateChange(selectedValue); // Select
+      onStateChange(selectedValue);
     }
   };
 
-
-  // Handles changes in the NIRF ranking slider.
   const handleSliderChange = (event, newValue) => {
     setNirfRanking(newValue);
     handleSortChange(newValue);
   };
 
-  // Handles changes in the city filter.
   const handleCityChange = (event) => {
     const city = event.target.value;
 
-    // Check if the selected city is already selected
     if (selectedCity === city) {
-      // Deselect the city and clear the state
       setSelectedCity("");
-      onStateChange(""); // Deselect the state
+      onStateChange(""); 
     } else {
-      // Select the new city and its corresponding state
+      
       const state = getStateByCity(city);
       setSelectedCity(city);
       onStateChange(city);
@@ -66,13 +56,6 @@ function Ranking({
   };
 
 
-  // Handles changes in the NBA accreditation filter.
-  const handleNbaChange = (event) => {
-    setNbaAccreditation(event.target.value);
-    onNbaFilter(event.target.value);
-  };
-
-  // Clears all selected filters.
   const handleClearFilter = () => {
     setSelectedState("");
     setSelectedCity("");
@@ -81,18 +64,17 @@ function Ranking({
     handleNaacFilter({ target: { value: "" } });
     onStateChange("");
     onNbaFilter("");
-  }
+  };
 
   const nbaOptions = ["Accredited"];
 
-  // Helper function to retrieve the state corresponding to a city.
   function getStateByCity(city) {
     for (const [state, cities] of Object.entries(statesWithCitiesIndia)) {
       if (cities.includes(city)) {
         return state;
       }
     }
-    return null; // If city is not found in any state
+    return null; 
   }
 
   const formControlLabelStyle = {
@@ -100,155 +82,234 @@ function Ranking({
     justifyContent: "flex-start",
   };
 
+  
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(min-width: 768px)"); 
+    const handleResize = () => {
+      if (mediaQuery.matches) {
+        setOpenFilters(false); 
+      }
+    };
+
+    mediaQuery.addEventListener("change", handleResize);
+    return () => mediaQuery.removeEventListener("change", handleResize);
+  }, [setOpenFilters]);
+
   return (
-    <Grid container direction="column"
-      className="outer-box bg-white border border-[rgb(213,211,211)] text-[rgb(17,17,27)] w-[200px] p-[10px] rounded-[10px]">
-      <Grid item className="Inner-Topic flex justify-between">
-        <h5 className="Apply-Filter  font-bold mb-1 ">Apply Filter</h5>
-        {openFilters !== null &&
-          <button
-            className="md:hidden font-bold bg-blue-500 text-white px-4 py-2 rounded-lg"
-            onClick={() => {
-              if (openFilters) {
-                setOpenFilters(!openFilters)
-              }
-            }}
-          >
-            X
-          </button>}
-      </Grid>
+    <>
+      {/* Desktop view filter */}
+      <Grid
+        container
+        direction="column"
+        className="outer-box  bg-white border border-[rgb(213,211,211)] text-[rgb(17,17,27)] w-[240px] p-[20px] rounded-[10px] hidden md:flex"
+      >
+        <Grid item className="Inner-Topic flex justify-between ">
+          <h5 className="Apply-Filter font-bold mb-1">Apply Filter</h5>
+        </Grid>
 
-      {/* State filter section */}
-      <Grid item className="Inner-Topic">
-        <hr />
-        <h4 className="font-bold mb-1 sub-topic text-left">State</h4>
-        <hr />
-      </Grid>
-      <div className="scrollable-container max-h-[300px] overflow-y-auto">
-        {statesWithCitiesIndiaArray.map((states) => (
-          <Grid className="" item key={states.state}>
-            <FormControlLabel className="Check-Box p-0 m-0 h-[25px]"
-              control={
-                <Checkbox
-                  checked={selectedState === states.state}
-                  onChange={handleStateChange}
-                  value={states.state}
-                />
-              }
-              label={states.state}
-              style={formControlLabelStyle}
-            />
-          </Grid>
-        ))}
-      </div>
+        <Grid item className="Inner-Topic">
+          <hr />
+          <h4 className="font-bold mb-1 sub-topic text-left">State</h4>
+          <hr />
+        </Grid>
 
-      {/* City filter section */}
-      <Grid item className="Inner-Topic">
-        <hr />
-        <h4 className="font-bold mb-2 sub-topic">Select City</h4>
-        <hr />
-      </Grid>
-      <div className="scrollable-container max-h-[300px] overflow-y-auto">
-        {selectedState ? (
-          statesWithCitiesIndia[selectedState]?.map((city) => (
-            <Grid item key={city}>
+        <div className="scrollable-container max-h-[250px] overflow-y-auto">
+          {statesWithCitiesIndiaArray.map((states) => (
+            <Grid item key={states.state}>
               <FormControlLabel
                 className="Check-Box p-0 m-0 h-[25px]"
                 control={
                   <Checkbox
-                    checked={selectedCity === city}
-                    onChange={handleCityChange}
-                    value={city}
+                    checked={selectedState === states.state}
+                    onChange={handleStateChange}
+                    value={states.state}
                   />
                 }
-                label={city}
+                label={states.state}
                 style={formControlLabelStyle}
               />
             </Grid>
-          ))
-        ) : (
-          <p className="text-gray-500 italic">Please select a state to see its cities.</p>
-        )}
-      </div>
+          ))}
+        </div>
 
+        <Grid item className="Inner-Topic">
+          <hr />
+          <h4 className="font-bold mb-2 sub-topic">Select City</h4>
+          <hr />
+        </Grid>
 
-      {/* NAAC rating filter section */}
-      <Grid>
-        <hr />
-        <h2 className="font-bold mb-2 sub-topic">NAAC Rating</h2>
-        <hr />
-      </Grid>
-
-      <div className="scrollable-container max-h-[300px] overflow-y-auto">
-        {naacOptions.map((option) => (
-          <Grid item key={option}>
-            <FormControlLabel className="Check-Box p-0 m-0 h-[25px]"
-
-              control={
-                <Checkbox
-                  checked={filterNaac === option}
-                  onChange={handleNaacFilter}
-                  value={option}
+        <div className="scrollable-container max-h-[300px] overflow-y-auto">
+          {selectedState ? (
+            statesWithCitiesIndia[selectedState]?.map((city) => (
+              <Grid item key={city}>
+                <FormControlLabel
+                  className="Check-Box p-0 m-0 h-[25px]"
+                  control={
+                    <Checkbox
+                      checked={selectedCity === city}
+                      onChange={handleCityChange}
+                      value={city}
+                    />
+                  }
+                  label={city}
+                  style={formControlLabelStyle}
                 />
-              }
-              label={option}
-              style={formControlLabelStyle}
-            />
-          </Grid>
-        ))}
-      </div>
+              </Grid>
+            ))
+          ) : (
+            <p className="text-gray-500 italic">Please select a state to see its cities.</p>
+          )}
+        </div>
 
-      {/* NIRF ranking filter section */}
-      {/* <Grid item className="Inner-Topic">
-        <hr />
-        <h2 className="font-bold mb-2 sub-topic">NIRF Ranking</h2>
-        <hr />
+        <Grid>
+          <hr />
+          <h2 className="font-bold mb-2 sub-topic">NAAC Rating</h2>
+          <hr />
+        </Grid>
+
+        <div className="scrollable-container max-h-[300px] overflow-y-auto">
+          {naacOptions.map((option) => (
+            <Grid item key={option}>
+              <FormControlLabel
+                className="Check-Box p-0 m-0 h-[25px]"
+                control={
+                  <Checkbox
+                    checked={filterNaac === option}
+                    onChange={handleNaacFilter}
+                    value={option}
+                  />
+                }
+                label={option}
+                style={formControlLabelStyle}
+              />
+            </Grid>
+          ))}
+        </div>
+       
+        <button
+          className="clear-filter-btn font-bold mt-4 bg-blue-500 text-white px-4 py-2 rounded-lg"
+          onClick={handleClearFilter}
+        >
+          Clear Filters
+        </button>
       </Grid>
-      <Grid item>
-        <Slider
-          value={nirfRanking}
-          onChange={handleSliderChange}
-          valueLabelDisplay="auto"
-          min={0}
-          max={200}
-          step={1}
-        />
-      </Grid> */}
 
-      {/* NBA accreditation filter section */}
-      {/* <Grid item className="Inner-Topic">
-        <hr />
-        <h2 className="font-bold mb-2 sub-topic">NBA Accreditation</h2>
-        <hr />
-      </Grid>
-      <div className="scrollable-container max-h-[300px] overflow-y-auto">
-        {nbaOptions.map((option) => (
-          <Grid item key={option}>
-            <FormControlLabel className="Check-Box p-0"
+      {/* Mobile view pop-up */}
+      {openFilters && (
+        <div
+          className="fixed inset-0 z-50 bg-black bg-opacity-50 flex justify-center items-center"
+          onClick={() => setOpenFilters(false)}
+        >
+          <div
+            className="bg-white p-6 rounded-lg shadow-lg max-w-lg relative w-full sm:max-w-md md:max-w-lg"
+            onClick={(e) => e.stopPropagation()}
+            style={{
+              paddingTop: "20px",
+              paddingBottom: "20px",
+              paddingLeft: "20px",
+              paddingRight: "20px",
+            }}
+          >
+            <Grid container direction="column">
+              <Grid item className="Inner-Topic flex justify-between">
+                <h5 className="Apply-Filter font-bold mb-1">Apply Filter</h5>
+                <button
+                  className="font-bold bg-blue-500 text-white px-4 py-2 rounded-lg"
+                  onClick={() => setOpenFilters(false)}
+                >
+                  X
+                </button>
+              </Grid>
 
-              control={
-                <Checkbox
-                  checked={nbaAccreditation === option}
-                  onChange={handleNbaChange}
-                  value={option}
-                />
-              }
-              label={option}
-              style={formControlLabelStyle}
-            />
-          </Grid>
-        ))}
-      </div> */}
+              <Grid item className="Inner-Topic">
+                <hr />
+                <h4 className="font-bold mb-1 sub-topic text-left">State</h4>
+                <hr />
+              </Grid>
+              <div className="scrollable-container max-h-[300px] overflow-y-auto">
+                {statesWithCitiesIndiaArray.map((states) => (
+                  <Grid item key={states.state}>
+                    <FormControlLabel
+                      className="Check-Box p-0 m-0 h-[25px]"
+                      control={
+                        <Checkbox
+                          checked={selectedState === states.state}
+                          onChange={handleStateChange}
+                          value={states.state}
+                        />
+                      }
+                      label={states.state}
+                      style={formControlLabelStyle}
+                    />
+                  </Grid>
+                ))}
+              </div>
 
-      {/* Clear Filters button */}
-      <button
-        className="clear-filter-btn font-bold mt-4 bg-blue-500 text-white px-4 py-2 rounded-lg"
-        onClick={handleClearFilter}
-      >Clear Filters</button>
-    </Grid>
+              <Grid item className="Inner-Topic">
+                <hr />
+                <h4 className="font-bold mb-2 sub-topic">Select City</h4>
+                <hr />
+              </Grid>
+              <div className="scrollable-container max-h-[300px] overflow-y-auto">
+                {selectedState ? (
+                  statesWithCitiesIndia[selectedState]?.map((city) => (
+                    <Grid item key={city}>
+                      <FormControlLabel
+                        className="Check-Box p-0 m-0 h-[25px]"
+                        control={
+                          <Checkbox
+                            checked={selectedCity === city}
+                            onChange={handleCityChange}
+                            value={city}
+                          />
+                        }
+                        label={city}
+                        style={formControlLabelStyle}
+                      />
+                    </Grid>
+                  ))
+                ) : (
+                  <p className="text-gray-500 italic">Please select a state to see its cities.</p>
+                )}
+              </div>
+
+              <Grid>
+                <hr />
+                <h2 className="font-bold mb-2 sub-topic">NAAC Rating</h2>
+                <hr />
+              </Grid>
+
+              <div className="scrollable-container max-h-[300px] overflow-y-auto">
+                {naacOptions.map((option) => (
+                  <Grid item key={option}>
+                    <FormControlLabel
+                      className="Check-Box p-0 m-0 h-[25px]"
+                      control={
+                        <Checkbox
+                          checked={filterNaac === option}
+                          onChange={handleNaacFilter}
+                          value={option}
+                        />
+                      }
+                      label={option}
+                      style={formControlLabelStyle}
+                    />
+                  </Grid>
+                ))}
+              </div>
+
+              <button
+                className="clear-filter-btn font-bold mt-4 bg-blue-500 text-white px-4 py-2 rounded-lg"
+                onClick={handleClearFilter}
+              >
+                Clear Filters
+              </button>
+            </Grid>
+          </div>
+        </div>
+      )}
+    </>
   );
 }
 
 export default Ranking;
-
-
